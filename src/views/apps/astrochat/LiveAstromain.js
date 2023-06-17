@@ -11,23 +11,26 @@ import {
   DropdownItem,
   DropdownToggle,
 } from "reactstrap";
+import { history } from "../../../history";
 import axiosConfig from "../../../axiosConfig";
 import axios from "axios";
 import { ContextLayout } from "../../../utility/context/Layout";
 import { AgGridReact } from "ag-grid-react";
-import { Eye, Edit, Trash2, ChevronDown } from "react-feather";
+import { Eye, Edit, Trash2, ChevronDown, CloudLightning } from "react-feather";
 //import classnames from "classnames";
 import "../../../assets/scss/plugins/tables/_agGridStyleOverride.scss";
 import "../../../assets/scss/pages/users.scss";
 import { Route } from "react-router-dom";
 import Breadcrumbs from "../../../components/@vuexy/breadCrumbs/BreadCrumb";
+import swal from "sweetalert";
 
-class InTakeList extends React.Component {
+class LiveAstromain extends React.Component {
   state = {
     rowData: [],
     paginationPageSize: 20,
     currenPageSize: "",
     getPageSize: "",
+    channelbuttonshow: "",
     defaultColDef: {
       sortable: true,
       editable: true,
@@ -39,26 +42,264 @@ class InTakeList extends React.Component {
         headerName: "S.No",
         valueGetter: "node.rowIndex + 1",
         field: "node.rowIndex + 1",
-        width: 100,
+        width: 200,
         filter: true,
         // checkboxSelection: true,
         // headerCheckboxSelectionFilteredOnly: true,
         // headerCheckboxSelection: true,
       },
+
+      {
+        headerName: "Channel Name",
+        field: "channelName",
+        filter: true,
+        width: 300,
+        cellRendererFramework: (params) => {
+          return (
+            <div>
+              <span>{params?.data?.channelName}</span>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "Action",
+        field: "sortorder",
+        width: 180,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="actions cursor-pointer">
+              {/* <Route
+                render={({ history }) => (
+                  <Eye
+                    className="mr-50"
+                    size="25px"
+                    color="green"
+                    // onClick={() =>
+                    //   history.push(
+                    //     `/app/userride/viewUserRide/${params.data._id}`
+                    //   )
+                    // }
+                  />
+                )}
+              /> */}
+              {/* <Route
+                render={({ history }) => (
+                  <Edit
+                    className="mr-50"
+                    size="25px"
+                    color="blue"
+                    // onClick={() =>
+                    //   history.push(
+                    //     `/app/astrology/editAstrologer/${params.data._id}`
+                    //   )
+                    // }
+                  />
+                )}
+              /> */}
+              <Trash2
+                className="mr-50"
+                size="25px"
+                color="red"
+                onClick={() => {
+                  let selectedData = this.gridApi.getSelectedRows();
+                  this.runthisfunction(params.data._id);
+
+                  this.gridApi.updateRowData({ remove: selectedData });
+                }}
+              />
+            </div>
+          );
+        },
+      },
+
+      // {
+      //   headerName: "Status",
+      //   field: "email	",
+      //   filter: true,
+      //   width: 120,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <span>{params.data.userid?.email}</span>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "Mobile No.",
+      //   field: "mobile",
+      //   filter: true,
+      //   width: 120,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div>
+      //         <span>{params.data.userid?.mobile}</span>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "Gender",
+      //   field: "gender",
+      //   filter: true,
+      //   width: 120,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div>
+      //         <span>{params.data.gender}</span>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "DOB",
+      //   field: "dob",
+      //   filter: true,
+      //   width: 120,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div>
+      //         <span>{params.data.dob}</span>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "Time",
+      //   field: "date_of_time",
+      //   filter: true,
+      //   width: 120,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div>
+      //         <span>{params.data.date_of_time}</span>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "Birth Place",
+      //   field: "birthPlace",
+      //   filter: true,
+      //   width: 120,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div>
+      //         <span>{params.data.birthPlace}</span>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "Birth Place",
+      //   field: "birthPlace",
+      //   filter: true,
+      //   width: 120,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div>
+      //         <span>{params.data.birthPlace}</span>
+      //       </div>
+      //     );
+      //   },
+      // },
+
+      // {
+      //   headerName: "Marital Status",
+      //   field: "marital_status",
+      //   filter: true,
+      //   width: 120,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div>
+      //         <span>{params.data.marital_status}</span>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "Occupation",
+      //   field: "occupation",
+      //   filter: true,
+      //   width: 120,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div>
+      //         <span>{params.data.occupation}</span>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "Topic Of concern ",
+      //   field: "topic_of_cnsrn",
+      //   filter: true,
+      //   width: 120,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div>
+      //         <span>{params.data.topic_of_cnsrn}</span>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "Your Topic Of concern ",
+      //   field: "entertopic_of_cnsrn",
+      //   filter: true,
+      //   width: 120,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div>
+      //         <span>{params.data.entertopic_of_cnsrn}</span>
+      //       </div>
+      //     );
+      //   },
+      // },
+
+      //   {
+      //     headerName: "Status",
+      //     field: "approvedstatus",
+      //     filter: true,
+      //     width: 100,
+      //     cellRendererFramework: (params) => {
+      //       return params.value === "true" ? (
+      //         <div className="badge badge-pill badge-success">
+      //           {params.data.approvedstatus}
+      //         </div>
+      //       ) : params.value === "false" ? (
+      //         <div className="badge badge-pill badge-warning">
+      //           {params.data.approvedstatus}
+      //         </div>
+      //       ) : null;
+      //     },
+      //   },
+
+      //   {
+      //     headerName: "Status",
+      //     field: "status",
+      //     filter: true,
+      //     width: 100,
+      //     cellRendererFramework: (params) => {
+      //       return params.value === "Online" ? (
+      //         <div className="badge badge-pill badge-success">
+      //           {params.data.status}
+      //         </div>
+      //       ) : params.value === "Offline" ? (
+      //         <div className="badge badge-pill badge-warning">
+      //           {params.data.status}
+      //         </div>
+      //       ) : null;
+      //     },
+      //   },
       // {
       //   headerName: "Action",
       //   field: "sortorder",
-      //   width: 130,
+      //   width: 100,
       //   cellRendererFramework: (params) => {
       //     return (
       //       <div className="actions cursor-pointer">
-      //         <Button
-      //           onClick={() => this.handlebirthchart(params?.data)}
-      //           color="success"
-      //           size="sm"
-      //         >
-      //           BirthChart
-      //         </Button>
       //         {/* <Route
       //           render={({ history }) => (
       //             <Eye
@@ -101,208 +342,27 @@ class InTakeList extends React.Component {
       //     );
       //   },
       // },
-
-      {
-        headerName: "Name",
-        field: "firstname",
-        filter: true,
-        width: 120,
-        cellRendererFramework: (params) => {
-          return (
-            <div>
-              <span>{params.data.firstname}</span>
-            </div>
-          );
-        },
-      },
-
-      // {
-      //   headerName: "Email",
-      //   field: "email	",
-      //   filter: true,
-      //   width: 120,
-      //   cellRendererFramework: (params) => {
-      //     return (
-      //       <div className="d-flex align-items-center cursor-pointer">
-      //         <span>{params.data.userid?.email}</span>
-      //       </div>
-      //     );
-      //   },
-      // },
-      // {
-      //   headerName: "Mobile No.",
-      //   field: "mobile",
-      //   filter: true,
-      //   width: 120,
-      //   cellRendererFramework: (params) => {
-      //     return (
-      //       <div>
-      //         <span>{params.data.userid?.mobile}</span>
-      //       </div>
-      //     );
-      //   },
-      // },
-      {
-        headerName: "Gender",
-        field: "gender",
-        filter: true,
-        width: 120,
-        cellRendererFramework: (params) => {
-          return (
-            <div>
-              <span>{params.data.gender}</span>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "DOB",
-        field: "dob",
-        filter: true,
-        width: 120,
-        cellRendererFramework: (params) => {
-          return (
-            <div>
-              <span>{params.data.dob}</span>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "Time",
-        field: "date_of_time",
-        filter: true,
-        width: 120,
-        cellRendererFramework: (params) => {
-          return (
-            <div>
-              <span>{params.data.date_of_time}</span>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "Birth Place",
-        field: "birthPlace",
-        filter: true,
-        width: 120,
-        cellRendererFramework: (params) => {
-          return (
-            <div>
-              <span>{params.data.birthPlace}</span>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "Birth Place",
-        field: "birthPlace",
-        filter: true,
-        width: 120,
-        cellRendererFramework: (params) => {
-          return (
-            <div>
-              <span>{params.data.birthPlace}</span>
-            </div>
-          );
-        },
-      },
-
-      {
-        headerName: "Marital Status",
-        field: "marital_status",
-        filter: true,
-        width: 120,
-        cellRendererFramework: (params) => {
-          return (
-            <div>
-              <span>{params.data.marital_status}</span>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "Occupation",
-        field: "occupation",
-        filter: true,
-        width: 120,
-        cellRendererFramework: (params) => {
-          return (
-            <div>
-              <span>{params.data.occupation}</span>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "Topic Of concern ",
-        field: "topic_of_cnsrn",
-        filter: true,
-        width: 120,
-        cellRendererFramework: (params) => {
-          return (
-            <div>
-              <span>{params.data.topic_of_cnsrn}</span>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "Your Topic Of concern ",
-        field: "entertopic_of_cnsrn",
-        filter: true,
-        width: 120,
-        cellRendererFramework: (params) => {
-          return (
-            <div>
-              <span>{params.data.entertopic_of_cnsrn}</span>
-            </div>
-          );
-        },
-      },
-
-      //   {
-      //     headerName: "Status",
-      //     field: "approvedstatus",
-      //     filter: true,
-      //     width: 100,
-      //     cellRendererFramework: (params) => {
-      //       return params.value === "true" ? (
-      //         <div className="badge badge-pill badge-success">
-      //           {params.data.approvedstatus}
-      //         </div>
-      //       ) : params.value === "false" ? (
-      //         <div className="badge badge-pill badge-warning">
-      //           {params.data.approvedstatus}
-      //         </div>
-      //       ) : null;
-      //     },
-      //   },
-
-      //   {
-      //     headerName: "Status",
-      //     field: "status",
-      //     filter: true,
-      //     width: 100,
-      //     cellRendererFramework: (params) => {
-      //       return params.value === "Online" ? (
-      //         <div className="badge badge-pill badge-success">
-      //           {params.data.status}
-      //         </div>
-      //       ) : params.value === "Offline" ? (
-      //         <div className="badge badge-pill badge-warning">
-      //           {params.data.status}
-      //         </div>
-      //       ) : null;
-      //     },
-      //   },
     ],
   };
-  handlebirthchart = (data) => {
-    console.log("object", data?.date_of_time.split(":"));
-    console.log("object", data?.dob.split("-"));
+  channellist = () => {
+    const astroid = localStorage.getItem("astroId");
+    console.log(astroid);
+    axiosConfig
+      .get(`user/channelList/${astroid}`)
+      .then((res) => {
+        console.log(res.data.data[0]?.channelName);
+        this.setState({ channelbuttonshow: res.data.data[0]?.channelName });
+        let rowData = res.data.data;
+        console.log(rowData);
+        this.setState({ rowData });
+      })
+      .catch((err) => {
+        console.log(err.response.data);
+      });
   };
   async componentDidMount() {
+    this.channellist();
+
     // let { id } = this.props.match.params;
 
     // await axios
@@ -312,21 +372,25 @@ class InTakeList extends React.Component {
     //     console.log(rowData);
     //     this.setState({ rowData });
     //   });
-    let astroId = localStorage.getItem("astroId");
-    await axiosConfig
-      .get(`admin/intekListByastro/${astroId}`)
-      .then((response) => {
-        let rowData = response.data.data;
-        console.log(rowData);
-        this.setState({ rowData });
-      });
+    // let astroId = localStorage.getItem("astroId");
+    // await axiosConfig
+    //   .get(`admin/intekListByastro/63a5a63c2ca20d31009ebf02`)
+    //   .then((response) => {
+    //     let rowData = response.data.data;
+    //     console.log(rowData);
+    //     this.setState({ rowData });
+    //   });
   }
 
   async runthisfunction(id) {
     console.log(id);
-    await axiosConfig.get(`/admin/dlt_ChatIntek/${id}`).then(
+    await axiosConfig.get(`/user/dltVideoChannl/${id}`).then(
       (response) => {
-        console.log(response);
+        console.log(response.data);
+        if (response.data.status === true) {
+          this.channellist();
+          swal("Deleted sucessfully");
+        }
       },
       (error) => {
         console.log(error);
@@ -361,9 +425,9 @@ class InTakeList extends React.Component {
       (
         <div>
           <Breadcrumbs
-            breadCrumbTitle="Conversion In Take List"
+            breadCrumbTitle="Videocall"
             breadCrumbParent="Home"
-            breadCrumbActive=" Conversion InTake List "
+            breadCrumbActive="Videocall"
           />
 
           <Row className="app-user-list">
@@ -373,23 +437,29 @@ class InTakeList extends React.Component {
                 <Row className="m-2">
                   <Col>
                     <h1 sm="6" className="float-left">
-                      Conversion in Take List
+                      Your live Stream channel
                     </h1>
                   </Col>
-                  {/* <Col>
-                    <Route
-                      render={({ history }) => (
-                        <Button
-                          className=" btn btn-success float-right"
-                          onClick={() =>
-                            history.push("/app/astrology/addAstrologer")
-                          }
-                        >
-                          Add Astrologer
-                        </Button>
-                      )}
-                    />
-                  </Col> */}
+                  <Col>
+                    {this.state.channelbuttonshow == "" ||
+                    this.state.channelbuttonshow == null ? (
+                      <>
+                        <Route
+                          render={({ history }) => (
+                            <Button
+                              className=" btn btn-success float-right"
+                              onClick={
+                                () => history.push("/liveastro")
+                                // history.push("/app/astrology/addAstrologer")
+                              }
+                            >
+                              Add Your Channel
+                            </Button>
+                          )}
+                        />
+                      </>
+                    ) : null}
+                  </Col>
                 </Row>
                 <CardBody>
                   {this.state.rowData === null ? null : (
@@ -491,4 +561,4 @@ class InTakeList extends React.Component {
     );
   }
 }
-export default InTakeList;
+export default LiveAstromain;

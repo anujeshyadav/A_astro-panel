@@ -16,7 +16,8 @@ import axios from "axios";
 import { ContextLayout } from "../../../utility/context/Layout";
 import { AgGridReact } from "ag-grid-react";
 import { Eye, Edit, Trash2, ChevronDown } from "react-feather";
-//import classnames from "classnames";
+
+import axiosConfig from "../../../axiosConfig";
 import "../../../assets/scss/plugins/tables/_agGridStyleOverride.scss";
 import "../../../assets/scss/pages/users.scss";
 import { Route } from "react-router-dom";
@@ -45,7 +46,81 @@ class FaqUserList extends React.Component {
         // headerCheckboxSelectionFilteredOnly: true,
         // headerCheckboxSelection: true,
       },
-
+      {
+        headerName: "Actions",
+        field: "sortorder",
+        width: 100,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="actions cursor-pointer">
+              <Route
+                render={({ history }) => (
+                  <Eye
+                    className="mr-50"
+                    size="25px"
+                    color="green"
+                    onClick={() =>
+                      history.push(`/app/user/viewone/${params.data._id}`)
+                    }
+                  />
+                )}
+              />
+              {/* <Route
+                render={({ history }) => (
+                  <Edit
+                    className="mr-50"
+                    size="25px"
+                    color="blue"
+                    onClick={() => history.push("/app/userride/editUserRide")}
+                  />
+                )}
+              /> */}
+              <Trash2
+                className="mr-50"
+                size="25px"
+                color="red"
+                onClick={() => {
+                  let selectedData = this.gridApi.getSelectedRows();
+                  this.runthisfunction(params.data?._id);
+                  this.gridApi.updateRowData({ remove: selectedData });
+                }}
+              />
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "User Question",
+        field: "userquestion",
+        filter: true,
+        width: 200,
+        cellRendererFramework: (params) => {
+          return (
+            <div>
+              <span>{params.data?.question}</span>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "Answer Of Question",
+        field: "ansorques",
+        filter: true,
+        width: 200,
+        cellRendererFramework: (params) => {
+          return (
+            <div>
+              <span>
+                {params.data?.answer ? (
+                  <span>{params.data?.answer}</span>
+                ) : (
+                  <span style={{ color: "red" }}>Answer not Given</span>
+                )}
+              </span>
+            </div>
+          );
+        },
+      },
       {
         headerName: "User Name",
         field: "username",
@@ -54,9 +129,7 @@ class FaqUserList extends React.Component {
         cellRendererFramework: (params) => {
           return (
             <div>
-              <span>
-                {params.data.firstname} {params.data.lastname}
-              </span>
+              <span>{params.data?.userid?.fullname}</span>
             </div>
           );
         },
@@ -70,7 +143,7 @@ class FaqUserList extends React.Component {
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
-              <span>{params.data.email}</span>
+              <span>{params.data?.userid?.email}</span>
             </div>
           );
         },
@@ -83,94 +156,34 @@ class FaqUserList extends React.Component {
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
-              <span>{params.data.email}</span>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "User Question",
-        field: "userquestion",
-        filter: true,
-        width: 200,
-        cellRendererFramework: (params) => {
-          return (
-            <div>
-              <span>{params.data.mobile}</span>
+              <span>{params.data?.userid?.mobile}</span>
             </div>
           );
         },
       },
 
+      // {
+      //   headerName: "Status",
+      //   field: "dateofregister",
+      //   filter: true,
+      //   width: 200,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div>
+      //         <span>{params.data.mobile}</span>
+      //       </div>
+      //     );
+      //   },
+      // },
       {
-        headerName: "Answer Of Question",
-        field: "ansorques",
-        filter: true,
-        width: 200,
-        cellRendererFramework: (params) => {
-          return (
-            <div>
-              <span>{params.data.mobile}</span>
-            </div>
-          );
-        },
-      },
-
-      {
-        headerName: "Status",
+        headerName: "Created on",
         field: "dateofregister",
         filter: true,
         width: 200,
         cellRendererFramework: (params) => {
           return (
             <div>
-              <span>{params.data.mobile}</span>
-            </div>
-          );
-        },
-      },
-
-      {
-        headerName: "Actions",
-        field: "sortorder",
-        width: 200,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="actions cursor-pointer">
-              <Route
-                render={({ history }) => (
-                  <Eye
-                    className="mr-50"
-                    size="25px"
-                    color="green"
-                    onClick={() =>
-                      history.push(
-                        `/app/userride/viewUserRide/${params.data._id}`
-                      )
-                    }
-                  />
-                )}
-              />
-              <Route
-                render={({ history }) => (
-                  <Edit
-                    className="mr-50"
-                    size="25px"
-                    color="blue"
-                    onClick={() => history.push("/app/userride/editUserRide")}
-                  />
-                )}
-              />
-              <Trash2
-                className="mr-50"
-                size="25px"
-                color="red"
-                onClick={() => {
-                  let selectedData = this.gridApi.getSelectedRows();
-                  this.runthisfunction(params.data._id);
-                  this.gridApi.updateRowData({ remove: selectedData });
-                }}
-              />
+              <span>{params.data?.createdAt}</span>
             </div>
           );
         },
@@ -178,18 +191,11 @@ class FaqUserList extends React.Component {
     ],
   };
   async componentDidMount() {
-    let { id } = this.props.match.params;
+    // let { id } = this.props.match.params;
+    let astroId = localStorage.getItem("astroId");
 
-    await axios
-      .get(`http://3.108.185.7:4000/user/view_onecust/${id}`)
-      .then((response) => {
-        let rowData = response.data.data;
-        console.log(rowData);
-        this.setState({ rowData });
-      });
-
-    await axios
-      .get("http://3.108.185.7:4000/admin/allcustomer")
+    await axiosConfig
+      .get(`/user/astro_ques_list/${astroId}`)
       .then((response) => {
         let rowData = response.data.data;
         console.log(rowData);
@@ -198,11 +204,8 @@ class FaqUserList extends React.Component {
   }
 
   async runthisfunction(id) {
-    console.log(id);
-    await axios.get(`http://3.108.185.7:4000/admin/delcustomer/${id}`).then(
-      (response) => {
-        console.log(response);
-      },
+    await axiosConfig.get(`/user/dlt_ask_qus/${id}`).then(
+      (response) => {},
       (error) => {
         console.log(error);
       }
@@ -248,10 +251,10 @@ class FaqUserList extends React.Component {
                 <Row className="m-2">
                   <Col>
                     <h1 sm="6" className="float-left">
-                      FAQ Users List
+                      Users FAQ List
                     </h1>
                   </Col>
-                  <Col>
+                  {/* <Col>
                     <Route
                       render={({ history }) => (
                         <Button
@@ -262,7 +265,7 @@ class FaqUserList extends React.Component {
                         </Button>
                       )}
                     />
-                  </Col>
+                  </Col> */}
                 </Row>
                 <CardBody>
                   {this.state.rowData === null ? null : (

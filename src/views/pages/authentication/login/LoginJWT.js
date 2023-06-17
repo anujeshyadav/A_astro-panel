@@ -1,15 +1,24 @@
 import React from "react";
-// import { Link } from 'react-router-dom'
-import { CardBody, FormGroup, Form, Input, Button, Label } from "reactstrap";
+
+import {
+  CardBody,
+  FormGroup,
+  Form,
+  Input,
+  Button,
+  Label,
+  Col,
+} from "reactstrap";
 import { Phone } from "react-feather";
 import { loginWithJWT } from "../../../../redux/actions/auth/loginActions";
 import { connect } from "react-redux";
-// import axios from "axios";
+
 import { Route } from "react-router-dom";
 import swal from "sweetalert";
-// import { history } from '../../../../history'
+// import { history } from "../../../../history";
 import axiosConfig from "../../../../axiosConfig";
-
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 class LoginJWT extends React.Component {
   constructor(props) {
     super(props);
@@ -22,7 +31,9 @@ class LoginJWT extends React.Component {
   handlechange = (e) => {
     this.setState({ [e.target.name]: e.target.value });
   };
-
+  handleSignUp = (e) => {
+    window.location.replace("/#/pages/register");
+  };
   handleLogin = (e) => {
     e.preventDefault();
     axiosConfig
@@ -54,11 +65,12 @@ class LoginJWT extends React.Component {
       })
 
       .then((response) => {
-        console.log(response.data);
-        console.log(response.data._id);
+        // console.log(response.data);
+        // console.log(response.data._id);
         if (response.data.msg === "otp verified") {
           swal("Login Successfull");
           localStorage.setItem("astroId", response.data._id);
+          localStorage.setItem("astroData", JSON.stringify(response.data));
           // localStorage.setItem("user_id", response.data.data._id);
           // this.props.history.push("/");
           window.location.replace("/#/");
@@ -85,13 +97,15 @@ class LoginJWT extends React.Component {
                 <Input
                   type="number"
                   name="otp"
+                  required
                   placeholder="Enter OTP"
+                  maxLength={6}
                   value={this.state.otp}
                   onChange={this.handlechange}
-                // required
+                  // required
                 />
 
-                <Label>Phone</Label>
+                <Label>OTP*</Label>
               </FormGroup>
 
               <div className="d-flex justify-content-center">
@@ -109,18 +123,25 @@ class LoginJWT extends React.Component {
           <CardBody className="pt-1">
             <Form onSubmit={this.handleLogin}>
               <FormGroup className="form-label-group position-relative has-icon-left">
-                <Input
-                  type="number"
-                  maxLength={10}
-                  name="mobile"
-                  placeholder="Enter here your  valid Mobile Number"
-                  value={this.state.mobile}
-                  onChange={this.handlechange}
-                />
-                <div className="form-control-position">
-                  <Phone size={15} />
+                <div className="form-group mtb-10">
+                  <Label>Mobile Number*</Label>
+                  <PhoneInput
+                    countryCodeEditable={false}
+                    className="mob-int"
+                    country={"in"}
+                    value={this.state.mobile}
+                    onChange={(mobile) => {
+                      this.setState({ mobile: mobile });
+                      console.log(mobile);
+                    }}
+                  />
+                  {this.state.mobileError !== "" ? (
+                    <span style={{ color: "red" }}>
+                      {this.state.mobileError}
+                    </span>
+                  ) : null}
                 </div>
-                <Label>Phone</Label>
+                {/* </Col> */}
               </FormGroup>
 
               <div className="d-flex justify-content-center">
@@ -133,6 +154,28 @@ class LoginJWT extends React.Component {
                 />
               </div>
             </Form>
+
+            <div className="d-flex mt-2">
+              <div>New On Our PlatForm </div>
+              <Route
+                render={({ history }) => (
+                  <div
+                    className="ml-1"
+                    style={{ color: "blue", cursor: "pointer" }}
+                    onClick={this.handleSignUp}
+                  >
+                    Sign up
+                  </div>
+                )}
+              />
+              {/* <Route
+                render={({ history }) => (
+                  <button color="primary" type="submit">
+                    Sign up
+                  </button>
+                )}
+              /> */}
+            </div>
           </CardBody>
         )}
       </React.Fragment>
@@ -144,4 +187,10 @@ const mapStateToProps = (state) => {
     values: state.auth.login,
   };
 };
+
 export default connect(mapStateToProps, { loginWithJWT })(LoginJWT);
+// export function getastroID() {
+//   const name = JSON.parse(localStorage.getItem("astroData"));
+//   const astroname = name.fullname;
+//   return astroname;
+// }

@@ -65,9 +65,30 @@ const AddUser = lazy(() => import("./views/apps/user/AddUser"));
 const ViewUser = lazy(() => import("./views/apps/user/ViewUser"));
 const EditUser = lazy(() => import("./views/apps/user/EditUser"));
 const videocall = lazy(() => import("./views/apps/astrochat/VideoAstro"));
+const liveastro = lazy(() => import("./views/apps/astrochat/LiveAstro"));
+const videocallYour = lazy(() =>
+  import("./views/apps/astrochat/YourVideocall")
+);
+const Videocalllandingpage = lazy(() =>
+  import("./views/apps/astrochat/GotoVideoCall.js")
+);
+const yourliveStream = lazy(() =>
+  import("./views/apps/astrochat/YourliveStream")
+);
+const liveStreamlandpage = lazy(() =>
+  import("./views/apps/astrochat/Gotolivestream.js")
+);
+const yourliveStreamone = lazy(() =>
+  import("./views/apps/astrochat/YourliveStreamone")
+);
 const videocallMain = lazy(() =>
   import("./views/apps/astrochat/VideoAstroMain")
 );
+const liveStreaming = lazy(() =>
+  import("./views/apps/astrochat/LiveAstromain")
+);
+
+// const liveStream = lazy(() => import("./views/apps/astrochat/LiveStreamdummy"));
 const Uploads = lazy(() => import("./views/apps/Uploads/UploadMain"));
 const Upload = lazy(() => import("./views/apps/Uploads/Uploads"));
 
@@ -81,6 +102,9 @@ const WalletManagement = lazy(() =>
 //Transaction history//
 const TransactionHistory = lazy(() =>
   import("./views/apps/transaction/TransactionHistory")
+);
+const withdrawlrest = lazy(() =>
+  import("./views/apps/transaction/Withdrawlrqst.js/Withdrawl")
 );
 // memberShip//
 const MemberShipList = lazy(() =>
@@ -175,6 +199,7 @@ const AddProduct = lazy(() => import("./views/apps/products/AddProduct"));
 // const UserChatList = lazy(() => import('./views/apps/chat/UserChatList'))
 
 const FaqUserList = lazy(() => import("./views/apps/user/FaqUserList"));
+const ViewOneFaq = lazy(() => import("./views/apps/user/ViewOneFaq"));
 
 const CallHistory = lazy(() => import("./views/apps/historycall/CallHistory"));
 
@@ -331,7 +356,7 @@ const ReactTables = lazy(() =>
 const Aggrid = lazy(() => import("./views/tables/aggrid/Aggrid"));
 const DataTable = lazy(() => import("./views/tables/data-tables/DataTables"));
 const profile = lazy(() => import("./views/pages/profile/Profile"));
-const faq = lazy(() => import("./views/pages/faq/FAQ"));
+// const faq = lazy(() => import("./views/pages/faq/FAQ"));
 
 const knowledgeBase = lazy(() =>
   import("./views/pages/knowledge-base/KnowledgeBase")
@@ -467,7 +492,23 @@ class AppRouter extends React.Component {
             <AppRoute path="/app/user/viewUser" component={ViewUser} />
             <AppRoute path="/chat" component={chat} />
             <AppRoute path="/videocall" component={videocall} />
+            <AppRoute path="/liveastro" component={liveastro} />
+            <AppRoute
+              path="/astrovideocall"
+              component={videocallYour}
+              fullLayout
+            />
+            <AppRoute path="/startvideocall" component={Videocalllandingpage} />
+            <AppRoute
+              path="/yourlivestreamNow"
+              component={yourliveStream}
+              fullLayout
+            />
+            <AppRoute path="/yourlivestream" component={liveStreamlandpage} />
+            <AppRoute path="/yourlivestreamone" component={yourliveStreamone} />
             <AppRoute path="/videocallmain" component={videocallMain} />
+            <AppRoute path="/livestreaming" component={liveStreaming} />
+            {/* <AppRoute path="/livestream" component={liveStream}  /> */}
             <AppRoute path="/uploads" component={Uploads} />
             <AppRoute path="/uploadgallary" component={Upload} />
             <AppRoute path="/userchat/chatlist" component={chatlist} />
@@ -549,6 +590,7 @@ class AppRouter extends React.Component {
               component={CallHistory}
             />
             <AppRoute path="/app/user/faquserlist" component={FaqUserList} />
+            <AppRoute path="/app/user/viewone/:id" component={ViewOneFaq} />
             <AppRoute
               path="/app/prediction/predictionlist"
               component={PredictionList}
@@ -709,6 +751,10 @@ class AppRouter extends React.Component {
             <AppRoute
               path="/app/transaction/transactionHistory"
               component={TransactionHistory}
+            />
+            <AppRoute
+              path="/app/transaction/withdrawlrqest"
+              component={withdrawlrest}
             />
             {/* memberSHip */}
             <AppRoute
@@ -1045,7 +1091,7 @@ class AppRouter extends React.Component {
               component={DataTable}
             />
             <AppRoute exact={true} path="/pages/profile" component={profile} />
-            <AppRoute exact={true} path="/pages/faq" component={faq} />
+            {/* <AppRoute exact={true} path="/pages/faq" component={faq} /> */}
             <AppRoute
               exact={true}
               path="/pages/knowledge-base"

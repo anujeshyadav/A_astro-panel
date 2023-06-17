@@ -11,18 +11,19 @@ import {
   DropdownItem,
   DropdownToggle,
 } from "reactstrap";
-import axiosConfig from "../../../axiosConfig";
-import axios from "axios";
-import { ContextLayout } from "../../../utility/context/Layout";
-import { AgGridReact } from "ag-grid-react";
-import { Eye, Edit, Trash2, ChevronDown } from "react-feather";
-//import classnames from "classnames";
-import "../../../assets/scss/plugins/tables/_agGridStyleOverride.scss";
-import "../../../assets/scss/pages/users.scss";
-import { Route } from "react-router-dom";
-import Breadcrumbs from "../../../components/@vuexy/breadCrumbs/BreadCrumb";
 
-class ProductList extends React.Component {
+import "../../../../assets/scss/plugins/tables/_agGridStyleOverride.scss";
+import { Eye, Edit, Trash2, ChevronDown } from "react-feather";
+import { ContextLayout } from "../../../../utility/context/Layout";
+import "../../../../assets/scss/pages/users.scss";
+
+import { AgGridReact } from "ag-grid-react";
+import { Route } from "react-router-dom";
+import axios from "axios";
+//import classnames from "classnames";
+import axiosConfig from "../../../../axiosConfig";
+
+class Withdrawl extends React.Component {
   state = {
     rowData: [],
     paginationPageSize: 20,
@@ -47,72 +48,57 @@ class ProductList extends React.Component {
       },
 
       {
-        headerName: "Product Name",
-        field: "product?.productname",
+        headerName: "Amount",
+        field: "firstname",
         filter: true,
         width: 200,
         cellRendererFramework: (params) => {
           return (
             <div>
-              <span>{params.data.product?.productname}</span>
+              <span>
+                {params.data.firstname} {params.data.lastname}
+              </span>
             </div>
           );
         },
       },
 
       {
-        headerName: "Thumbnail Image",
-        field: "product?.image[0]",
-        filter: true,
-        width: 200,
-        cellRendererFramework: (params) => {
-          return (
-            <div>
-              <img
-                src={params.data.product?.image[0]}
-                alt="img"
-                className="w-50 h-50 rounded-0"
-              />
-            </div>
-          );
-        },
-      },
-
-      {
-        headerName: "Category Name",
-        field: "category?.name",
+        headerName: "Email",
+        field: "email	",
         filter: true,
         width: 200,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
-              <span>{params.data.category?.name}</span>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "Selling Price",
-        field: "price",
-        filter: true,
-        width: 200,
-        cellRendererFramework: (params) => {
-          return (
-            <div>
-              <span>{params.data.price}</span>
+              <span>{params.data.email}</span>
             </div>
           );
         },
       },
 
       {
-        headerName: "Action",
+        headerName: "Mobile No.",
+        field: "mobile",
+        filter: true,
+        width: 200,
+        cellRendererFramework: (params) => {
+          return (
+            <div>
+              <span>{params.data.mobile}</span>
+            </div>
+          );
+        },
+      },
+
+      {
+        headerName: "Actions",
         field: "sortorder",
         width: 200,
         cellRendererFramework: (params) => {
           return (
             <div className="actions cursor-pointer">
-              {/* <Route
+              <Route
                 render={({ history }) => (
                   <Eye
                     className="mr-50"
@@ -120,7 +106,7 @@ class ProductList extends React.Component {
                     color="green"
                     onClick={() =>
                       history.push(
-                        `/app/userride/viewUserRide/${params.data._id}`
+                        `/app/customer/viewCustomer/${params.data._id}`
                       )
                     }
                   />
@@ -132,12 +118,10 @@ class ProductList extends React.Component {
                     className="mr-50"
                     size="25px"
                     color="blue"
-                    onClick={() =>
-                      history.push("/app/productmanager/editproduct")
-                    }
+                    onClick={() => history.push("/app/customer/editCustomer")}
                   />
                 )}
-              /> */}
+              />
               <Trash2
                 className="mr-50"
                 size="25px"
@@ -155,8 +139,15 @@ class ProductList extends React.Component {
     ],
   };
   async componentDidMount() {
-    let astroId = localStorage.getItem("astroId");
-    await axiosConfig.get(`/user/productlist/${astroId}`).then((response) => {
+    let { id } = this.props.match.params;
+
+    await axiosConfig.get(`/user/view_onecust/${id}`).then((response) => {
+      let rowData = response.data.data;
+      console.log(rowData);
+      this.setState({ rowData });
+    });
+
+    await axiosConfig.get("/admin/allcustomer").then((response) => {
       let rowData = response.data.data;
       console.log(rowData);
       this.setState({ rowData });
@@ -165,7 +156,7 @@ class ProductList extends React.Component {
 
   async runthisfunction(id) {
     console.log(id);
-    await axiosConfig.get(`/admin/del_astro_product/${id}`).then(
+    await axiosConfig.get(`/admin/delcustomer/${id}`).then(
       (response) => {
         console.log(response);
       },
@@ -198,13 +189,8 @@ class ProductList extends React.Component {
   render() {
     const { rowData, columnDefs, defaultColDef } = this.state;
     return (
-      <div>
-        <Breadcrumbs
-          breadCrumbTitle="Products"
-          breadCrumbParent="Home"
-          breadCrumbActive="Products"
-        />
-
+      console.log(rowData),
+      (
         <Row className="app-user-list">
           <Col sm="12"></Col>
           <Col sm="12">
@@ -212,20 +198,8 @@ class ProductList extends React.Component {
               <Row className="m-2">
                 <Col>
                   <h1 sm="6" className="float-left">
-                    Product List
+                    Withdrawl list
                   </h1>
-                </Col>
-                <Col>
-                  <Route
-                    render={({ history }) => (
-                      <Button
-                        className=" btn btn-success float-right"
-                        onClick={() => history.push("/app/products/addproduct")}
-                      >
-                        Add New
-                      </Button>
-                    )}
-                  />
                 </Col>
               </Row>
               <CardBody>
@@ -323,8 +297,8 @@ class ProductList extends React.Component {
             </Card>
           </Col>
         </Row>
-      </div>
+      )
     );
   }
 }
-export default ProductList;
+export default Withdrawl;

@@ -39,20 +39,18 @@ export class AddPredictoin extends Component {
   componentDidMount() {
     console.log(this.props.match.params);
     let { id } = this.props.match.params;
-    axiosConfig
-      .get(`/getonecustomer/${id}`)
-      .then((response) => {
-        console.log(response);
-        this.setState({
-            first_name: "",
-            last_name: "",
-            customer_email: "",
-            mobile_no: "",
-            sortorder: "",
-            selectedFile: null,
-            status: response.data.data.status,
-        });
-      })
+    axiosConfig.get(`/getonecustomer/${id}`).then((response) => {
+      console.log(response);
+      this.setState({
+        first_name: "",
+        last_name: "",
+        customer_email: "",
+        mobile_no: "",
+        sortorder: "",
+        selectedFile: null,
+        status: response.data.data.status,
+      });
+    });
     //   .catch((error) => {
     //     console.log(error);
     //   });
@@ -98,7 +96,7 @@ export class AddPredictoin extends Component {
     // }
     let { id } = this.props.match.params;
     axiosConfig
-      .post(`/view_onecust/${id}`,data )
+      .post(`/view_onecust/${id}`, data)
       .then((response) => {
         console.log(response);
         this.props.history.push("/app/customer/customerList");
@@ -111,28 +109,31 @@ export class AddPredictoin extends Component {
     return (
       <div>
         <Breadcrumbs
-            breadCrumbTitle="User"
-            breadCrumbParent="Home"
-            breadCrumbActive="Add Predictoin "
-          />
+          breadCrumbTitle="User"
+          breadCrumbParent="Home"
+          breadCrumbActive="Add Predictoin "
+        />
         <Card>
           <Row className="m-2">
             <Col>
               <h1 col-sm-6 className="float-left">
-                  Add Predictoin
+                Add Predictoin
               </h1>
             </Col>
             <Col>
-            <Route render={({ history}) => (
-              <Button
-                className=" btn btn-danger float-right"
-                onClick={() => history.push("/app/prediction/predictionlist")}
-              >
-                Back
-                </Button>
+              <Route
+                render={({ history }) => (
+                  <Button
+                    className=" btn btn-danger float-right"
+                    onClick={() =>
+                      history.push("/app/orderhistory/orderhisList")
+                    }
+                  >
+                    Back
+                  </Button>
                 )}
               />
-              </Col>
+            </Col>
           </Row>
           <CardBody>
             <Form className="m-1" onSubmit={this.submitHandler}>
@@ -145,17 +146,17 @@ export class AddPredictoin extends Component {
                     name="first_name"
                     placeholder="Enter Title"
                     value={this.state.first_name}
-                    onChange={this.changeHandler}>
-                  </Input>
+                    onChange={this.changeHandler}
+                  ></Input>
                 </Col>
                 <Col lg="6" md="6" sm="6" className="mb-2">
                   <Label>Prediction Type</Label>
-                   <select className="form-control">
-                       <option selected>---Select---</option>
-                       <option>Daily</option>
-                       <option>Weekly</option>
-                       <option>Monthly</option>
-                   </select>
+                  <select className="form-control">
+                    <option selected>---Select---</option>
+                    <option>Daily</option>
+                    <option>Weekly</option>
+                    <option>Monthly</option>
+                  </select>
                 </Col>
                 <Col lg="6" md="6" sm="6" className="mb-2">
                   <Label>Date</Label>
@@ -165,8 +166,8 @@ export class AddPredictoin extends Component {
                     name="customer_email"
                     placeholder="Email"
                     value={this.state.customer_email}
-                    onChange={this.changeHandler} >
-                  </Input>
+                    onChange={this.changeHandler}
+                  ></Input>
                 </Col>
 
                 <Col lg="6" md="6" sm="6" className="mb-2">
@@ -177,49 +178,49 @@ export class AddPredictoin extends Component {
                     name="mobile_no"
                     placeholder="Mobile No."
                     value={this.state.mobile_no}
-                    onChange={this.changeHandler}>
-                  </Input>
+                    onChange={this.changeHandler}
+                  ></Input>
                 </Col>
 
                 <Col lg="12" md="12" sm="12" className="mb-2">
                   <Label>Description</Label>
-                   <textarea className="form-control" placeholder="Description...">
-
-                   </textarea>
+                  <textarea
+                    className="form-control"
+                    placeholder="Description..."
+                  ></textarea>
                 </Col>
               </Row>
-              <Row>
+              <Row></Row>
+              <Col lg="6" md="6" sm="6" className="mb-2">
+                <Label className="mb-1">Status</Label>
+                <div
+                  className="form-label-group"
+                  onChange={(e) => this.changeHandler1(e)}
+                >
+                  <input
+                    style={{ marginRight: "3px" }}
+                    type="radio"
+                    name="status"
+                    value="Active"
+                  />
+                  <span style={{ marginRight: "20px" }}>Active</span>
 
-            </Row>
-                <Col lg="6" md="6" sm="6" className="mb-2">
-                  <Label className="mb-1">Status</Label>
-                  <div
-                    className="form-label-group"
-                    onChange={(e) => this.changeHandler1(e)}
-                  >
-                    <input
-                      style={{ marginRight: "3px" }}
-                      type="radio"
-                      name="status"
-                      value="Active"
-                    />
-                    <span style={{ marginRight: "20px" }}>Active</span>
-
-                    <input
-                      style={{ marginRight: "3px" }}
-                      type="radio"
-                      name="status"
-                      value="Inactive"
-                    />
-                    <span style={{ marginRight: "3px" }}>Inactive</span>
-                  </div>
-                </Col>
+                  <input
+                    style={{ marginRight: "3px" }}
+                    type="radio"
+                    name="status"
+                    value="Inactive"
+                  />
+                  <span style={{ marginRight: "3px" }}>Inactive</span>
+                </div>
+              </Col>
               <Row>
                 <Col lg="6" md="6" sm="6" className="mb-2">
                   <Button.Ripple
                     color="primary"
                     type="submit"
-                    className="mr-1 mb-1">
+                    className="mr-1 mb-1"
+                  >
                     Save
                   </Button.Ripple>
                 </Col>

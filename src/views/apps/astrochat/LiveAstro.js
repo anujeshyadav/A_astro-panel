@@ -7,7 +7,7 @@ import axiosConfig from "../../../axiosConfig";
 import { history } from "../../../history";
 import swal from "sweetalert";
 
-const VideoAstro = () => {
+const LiveAstro = () => {
   const [videoCall, setVideoCall] = useState(false);
   const [channelname, setchannel] = useState("");
   const [view, setview] = useState(false);
@@ -24,7 +24,7 @@ const VideoAstro = () => {
     // Set the user ID.
     uid: 0,
     // Set the user role
-    role: "",
+    role: "host",
   };
   const callbacks = {
     EndCall: () => setVideoCall(false),
@@ -157,4 +157,4 @@ const VideoAstro = () => {
   );
 };
 
-export default VideoAstro;
+export default LiveAstro;

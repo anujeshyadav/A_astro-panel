@@ -16,12 +16,13 @@ import axiosConfig from "../../../axiosConfig";
 import axios from "axios";
 import { ContextLayout } from "../../../utility/context/Layout";
 import { AgGridReact } from "ag-grid-react";
-import { Eye, Edit, Trash2, ChevronDown } from "react-feather";
+import { Eye, Edit, Trash2, ChevronDown, CloudLightning } from "react-feather";
 //import classnames from "classnames";
 import "../../../assets/scss/plugins/tables/_agGridStyleOverride.scss";
 import "../../../assets/scss/pages/users.scss";
 import { Route } from "react-router-dom";
 import Breadcrumbs from "../../../components/@vuexy/breadCrumbs/BreadCrumb";
+import swal from "sweetalert";
 
 class VideoAstroMain extends React.Component {
   state = {
@@ -29,6 +30,7 @@ class VideoAstroMain extends React.Component {
     paginationPageSize: 20,
     currenPageSize: "",
     getPageSize: "",
+    channelbuttonshow: "",
     defaultColDef: {
       sortable: true,
       editable: true,
@@ -40,7 +42,7 @@ class VideoAstroMain extends React.Component {
         headerName: "S.No",
         valueGetter: "node.rowIndex + 1",
         field: "node.rowIndex + 1",
-        width: 100,
+        width: 200,
         filter: true,
         // checkboxSelection: true,
         // headerCheckboxSelectionFilteredOnly: true,
@@ -51,7 +53,7 @@ class VideoAstroMain extends React.Component {
         headerName: "Channel Name",
         field: "channelName",
         filter: true,
-        width: 180,
+        width: 300,
         cellRendererFramework: (params) => {
           return (
             <div>
@@ -60,151 +62,201 @@ class VideoAstroMain extends React.Component {
           );
         },
       },
+      {
+        headerName: "Action",
+        field: "sortorder",
+        width: 180,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="actions cursor-pointer">
+              {/* <Route
+                render={({ history }) => (
+                  <Eye
+                    className="mr-50"
+                    size="25px"
+                    color="green"
+                    // onClick={() =>
+                    //   history.push(
+                    //     `/app/userride/viewUserRide/${params.data._id}`
+                    //   )
+                    // }
+                  />
+                )}
+              /> */}
+              {/* <Route
+                render={({ history }) => (
+                  <Edit
+                    className="mr-50"
+                    size="25px"
+                    color="blue"
+                    // onClick={() =>
+                    //   history.push(
+                    //     `/app/astrology/editAstrologer/${params.data._id}`
+                    //   )
+                    // }
+                  />
+                )}
+              /> */}
+              <Trash2
+                className="mr-50"
+                size="25px"
+                color="red"
+                onClick={() => {
+                  let selectedData = this.gridApi.getSelectedRows();
+                  this.runthisfunction(params.data._id);
 
-      {
-        headerName: "Status",
-        field: "email	",
-        filter: true,
-        width: 120,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <span>{params.data.userid?.email}</span>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "Mobile No.",
-        field: "mobile",
-        filter: true,
-        width: 120,
-        cellRendererFramework: (params) => {
-          return (
-            <div>
-              <span>{params.data.userid?.mobile}</span>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "Gender",
-        field: "gender",
-        filter: true,
-        width: 120,
-        cellRendererFramework: (params) => {
-          return (
-            <div>
-              <span>{params.data.gender}</span>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "DOB",
-        field: "dob",
-        filter: true,
-        width: 120,
-        cellRendererFramework: (params) => {
-          return (
-            <div>
-              <span>{params.data.dob}</span>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "Time",
-        field: "date_of_time",
-        filter: true,
-        width: 120,
-        cellRendererFramework: (params) => {
-          return (
-            <div>
-              <span>{params.data.date_of_time}</span>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "Birth Place",
-        field: "birthPlace",
-        filter: true,
-        width: 120,
-        cellRendererFramework: (params) => {
-          return (
-            <div>
-              <span>{params.data.birthPlace}</span>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "Birth Place",
-        field: "birthPlace",
-        filter: true,
-        width: 120,
-        cellRendererFramework: (params) => {
-          return (
-            <div>
-              <span>{params.data.birthPlace}</span>
+                  this.gridApi.updateRowData({ remove: selectedData });
+                }}
+              />
             </div>
           );
         },
       },
 
-      {
-        headerName: "Marital Status",
-        field: "marital_status",
-        filter: true,
-        width: 120,
-        cellRendererFramework: (params) => {
-          return (
-            <div>
-              <span>{params.data.marital_status}</span>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "Occupation",
-        field: "occupation",
-        filter: true,
-        width: 120,
-        cellRendererFramework: (params) => {
-          return (
-            <div>
-              <span>{params.data.occupation}</span>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "Topic Of concern ",
-        field: "topic_of_cnsrn",
-        filter: true,
-        width: 120,
-        cellRendererFramework: (params) => {
-          return (
-            <div>
-              <span>{params.data.topic_of_cnsrn}</span>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "Your Topic Of concern ",
-        field: "entertopic_of_cnsrn",
-        filter: true,
-        width: 120,
-        cellRendererFramework: (params) => {
-          return (
-            <div>
-              <span>{params.data.entertopic_of_cnsrn}</span>
-            </div>
-          );
-        },
-      },
+      // {
+      //   headerName: "Status",
+      //   field: "email	",
+      //   filter: true,
+      //   width: 120,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <span>{params.data.userid?.email}</span>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "Mobile No.",
+      //   field: "mobile",
+      //   filter: true,
+      //   width: 120,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div>
+      //         <span>{params.data.userid?.mobile}</span>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "Gender",
+      //   field: "gender",
+      //   filter: true,
+      //   width: 120,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div>
+      //         <span>{params.data.gender}</span>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "DOB",
+      //   field: "dob",
+      //   filter: true,
+      //   width: 120,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div>
+      //         <span>{params.data.dob}</span>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "Time",
+      //   field: "date_of_time",
+      //   filter: true,
+      //   width: 120,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div>
+      //         <span>{params.data.date_of_time}</span>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "Birth Place",
+      //   field: "birthPlace",
+      //   filter: true,
+      //   width: 120,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div>
+      //         <span>{params.data.birthPlace}</span>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "Birth Place",
+      //   field: "birthPlace",
+      //   filter: true,
+      //   width: 120,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div>
+      //         <span>{params.data.birthPlace}</span>
+      //       </div>
+      //     );
+      //   },
+      // },
+
+      // {
+      //   headerName: "Marital Status",
+      //   field: "marital_status",
+      //   filter: true,
+      //   width: 120,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div>
+      //         <span>{params.data.marital_status}</span>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "Occupation",
+      //   field: "occupation",
+      //   filter: true,
+      //   width: 120,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div>
+      //         <span>{params.data.occupation}</span>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "Topic Of concern ",
+      //   field: "topic_of_cnsrn",
+      //   filter: true,
+      //   width: 120,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div>
+      //         <span>{params.data.topic_of_cnsrn}</span>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "Your Topic Of concern ",
+      //   field: "entertopic_of_cnsrn",
+      //   filter: true,
+      //   width: 120,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div>
+      //         <span>{params.data.entertopic_of_cnsrn}</span>
+      //       </div>
+      //     );
+      //   },
+      // },
 
       //   {
       //     headerName: "Status",
@@ -241,64 +293,65 @@ class VideoAstroMain extends React.Component {
       //       ) : null;
       //     },
       //   },
-      {
-        headerName: "Action",
-        field: "sortorder",
-        width: 100,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="actions cursor-pointer">
-              {/* <Route
-                render={({ history }) => (
-                  <Eye
-                    className="mr-50"
-                    size="25px"
-                    color="green"
-                    onClick={() =>
-                      history.push(
-                        `/app/userride/viewUserRide/${params.data._id}`
-                      )
-                    }
-                  />
-                )}
-              /> */}
-              {/* <Route
-                render={({ history }) => (
-                  <Edit
-                    className="mr-50"
-                    size="25px"
-                    color="blue"
-                    onClick={() =>
-                      history.push(
-                        `/app/astrology/editAstrologer/${params.data._id}`
-                      )
-                    }
-                  />
-                )}
-              /> */}
-              {/* <Trash2
-                className="mr-50"
-                size="25px"
-                color="red"
-                onClick={() => {
-                  let selectedData = this.gridApi.getSelectedRows();
-                  this.runthisfunction(params.data._id);
-                  this.gridApi.updateRowData({ remove: selectedData });
-                }}
-              /> */}
-            </div>
-          );
-        },
-      },
+      // {
+      //   headerName: "Action",
+      //   field: "sortorder",
+      //   width: 100,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="actions cursor-pointer">
+      //         {/* <Route
+      //           render={({ history }) => (
+      //             <Eye
+      //               className="mr-50"
+      //               size="25px"
+      //               color="green"
+      //               onClick={() =>
+      //                 history.push(
+      //                   `/app/userride/viewUserRide/${params.data._id}`
+      //                 )
+      //               }
+      //             />
+      //           )}
+      //         /> */}
+      //         {/* <Route
+      //           render={({ history }) => (
+      //             <Edit
+      //               className="mr-50"
+      //               size="25px"
+      //               color="blue"
+      //               onClick={() =>
+      //                 history.push(
+      //                   `/app/astrology/editAstrologer/${params.data._id}`
+      //                 )
+      //               }
+      //             />
+      //           )}
+      //         /> */}
+      //         {/* <Trash2
+      //           className="mr-50"
+      //           size="25px"
+      //           color="red"
+      //           onClick={() => {
+      //             let selectedData = this.gridApi.getSelectedRows();
+      //             this.runthisfunction(params.data._id);
+      //             this.gridApi.updateRowData({ remove: selectedData });
+      //           }}
+      //         /> */}
+      //       </div>
+      //     );
+      //   },
+      // },
     ],
   };
-  async componentDidMount() {
+  channellist = () => {
     const astroid = localStorage.getItem("astroId");
     console.log(astroid);
     axiosConfig
       .get(`user/channelList/${astroid}`)
       .then((res) => {
-        console.log(res.data.data);
+        console.log(res.data.data[0]?.channelName);
+        this.setState({ channelbuttonshow: res.data.data[0]?.channelName });
         let rowData = res.data.data;
         console.log(rowData);
         this.setState({ rowData });
@@ -306,6 +359,10 @@ class VideoAstroMain extends React.Component {
       .catch((err) => {
         console.log(err.response.data);
       });
+  };
+  async componentDidMount() {
+    this.channellist();
+
     // let { id } = this.props.match.params;
 
     // await axios
@@ -327,9 +384,13 @@ class VideoAstroMain extends React.Component {
 
   async runthisfunction(id) {
     console.log(id);
-    await axiosConfig.get(`/admin/dlt_ChatIntek/${id}`).then(
+    await axiosConfig.get(`/user/dltVideoChannl/${id}`).then(
       (response) => {
-        console.log(response);
+        console.log(response.data);
+        if (response.data.status === true) {
+          this.channellist();
+          swal("Deleted sucessfully");
+        }
       },
       (error) => {
         console.log(error);
@@ -380,19 +441,24 @@ class VideoAstroMain extends React.Component {
                     </h1>
                   </Col>
                   <Col>
-                    <Route
-                      render={({ history }) => (
-                        <Button
-                          className=" btn btn-success float-right"
-                          onClick={
-                            () => history.push("/videocall")
-                            // history.push("/app/astrology/addAstrologer")
-                          }
-                        >
-                          Add Your Channel
-                        </Button>
-                      )}
-                    />
+                    {this.state.channelbuttonshow == "" ||
+                    this.state.channelbuttonshow == null ? (
+                      <>
+                        <Route
+                          render={({ history }) => (
+                            <Button
+                              className=" btn btn-success float-right"
+                              onClick={
+                                () => history.push("/videocall")
+                                // history.push("/app/astrology/addAstrologer")
+                              }
+                            >
+                              Add Your Channel
+                            </Button>
+                          )}
+                        />
+                      </>
+                    ) : null}
                   </Col>
                 </Row>
                 <CardBody>

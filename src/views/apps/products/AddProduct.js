@@ -38,20 +38,11 @@ export class AddProduct extends Component {
   //   console.log(event.target.files[0]);
   // };
 
-  componentDidUpdate() {
-    // console.log(this.state.category);
-    let { id } = this.props.match.params;
+  // componentDidUpdate() {
+  //   // console.log(this.state.category);
+  //   let { id } = this.props.match.params;
 
-    axiosConfig
-      .get(`/user/productbycategory/${this.state.category}`)
-      .then((response) => {
-        console.log(response.data.data);
-        this.setState({ productList: response.data.data });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
+  // }
 
   componentDidMount() {
     console.log(this.state.category);
@@ -133,7 +124,18 @@ export class AddProduct extends Component {
                     name="category"
                     placeholder="Enter Title"
                     value={this.state.category}
-                    onChange={this.changeHandler}
+                    onChange={(e) => {
+                      this.changeHandler(e);
+                      axiosConfig
+                        .get(`/user/productbycategory/${e.target.value}`)
+                        .then((response) => {
+                          console.log(response.data.data);
+                          this.setState({ productList: response.data.data });
+                        })
+                        .catch((error) => {
+                          console.log(error);
+                        });
+                    }}
                   >
                     <option>Select.....</option>
                     {this.state.categoryList?.map((catList) => (
@@ -155,8 +157,8 @@ export class AddProduct extends Component {
                   >
                     <option>Select.....</option>
                     {this.state.productList?.map((proList) => (
-                      <option key={proList._id} value={proList._id}>
-                        {proList.productname}
+                      <option key={proList._id} value={proList?.product?._id}>
+                        {proList?.product?.productname}
                       </option>
                     ))}
                   </CustomInput>
