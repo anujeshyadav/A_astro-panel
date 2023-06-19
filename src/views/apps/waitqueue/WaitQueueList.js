@@ -44,19 +44,27 @@ class WaitQueueList extends React.Component {
         // headerCheckboxSelectionFilteredOnly: true,
         // headerCheckboxSelection: true,
       },
-      // {
-      //   headerName: "Conversation Id",
-      //   field: "conversationId",
-      //   filter: true,
-      //   width: 200,
-      //   cellRendererFramework: (params) => {
-      //     return (
-      //       <div className="d-flex align-items-center cursor-pointer">
-      //         <span>{params.data.conversationId}</span>
-      //       </div>
-      //     );
-      //   },
-      // },
+      {
+        headerName: "Action",
+        field: "Action",
+        filter: true,
+
+        width: 200,
+        cellRendererFramework: (params) => {
+          return (
+            // <div className="d-flex align-items-center cursor-pointer">
+            <Button
+              onClick={() => this.handleJoin(params)}
+              className="mt-2"
+              color="success"
+              size="sm"
+            >
+              Connect
+            </Button>
+            // </div>
+          );
+        },
+      },
       {
         headerName: "Name",
         field: "fullname",
@@ -172,6 +180,9 @@ class WaitQueueList extends React.Component {
         },
       },
     ],
+  };
+  handleJoin = (data) => {
+    console.log(data);
   };
   async componentDidMount() {
     // let { id } = this.props.match.params;
