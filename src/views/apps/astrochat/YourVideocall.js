@@ -135,9 +135,6 @@ function YourVideocall() {
               <div style={{ display: "flex", width: "90vw", height: "80vh" }}>
                 <AgoraUIKit rtcProps={rtcProps} callbacks={callbacks} />
               </div>
-              {/* <div style={{ display: "flex", width: "100vw", height: "80vh" }}>
-                <AgoraUIKit rtcProps={rtcProps} callbacks={callbacks} />
-              </div> */}
             </>
           ) : (
             <>
