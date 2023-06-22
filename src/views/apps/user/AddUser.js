@@ -115,7 +115,9 @@ export default class AddCustomer extends Component {
                 render={({ history }) => (
                   <Button
                     className=" btn btn-danger float-right"
-                    onClick={() => history.push("/app/userride/userRideList")}
+                    onClick={() =>
+                      history.push("/app/userrequest/userrequestlist")
+                    }
                   >
                     {" "}
                     Back

@@ -64,11 +64,11 @@ class PayoutReport extends React.Component {
       {
         headerName: "Transaction Date",
         field: "createdAt",
-        width: 150,
+        width: 220,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
-              <span>{params.data.createdAt}</span>
+              <span>{params.data.createdAt.split("T")[0]}</span>
             </div>
           );
         },
@@ -82,7 +82,7 @@ class PayoutReport extends React.Component {
         cellRendererFramework: (params) => {
           return (
             <div>
-              <span>{params.data.transactionId}</span>
+              <span>#{params.data.transactionId}</span>
             </div>
           );
         },
@@ -113,7 +113,7 @@ class PayoutReport extends React.Component {
         cellRendererFramework: (params) => {
           return (
             <div className="actions cursor-pointer">
-              <Route
+              {/* <Route
                 render={({ history }) => (
                   <Eye
                     className="mr-50"
@@ -126,8 +126,8 @@ class PayoutReport extends React.Component {
                     }
                   />
                 )}
-              />
-              <Route
+              /> */}
+              {/* <Route
                 render={({ history }) => (
                   <Edit
                     className="mr-50"
@@ -136,7 +136,7 @@ class PayoutReport extends React.Component {
                     onClick={() => history.push("/app/customer/editCustomer")}
                   />
                 )}
-              />
+              /> */}
               <Trash2
                 className="mr-50"
                 size="25px"
@@ -153,27 +153,27 @@ class PayoutReport extends React.Component {
       },
     ],
   };
+  runthisfunction = (id) => {
+    axiosConfig
+      .get(`/admin/dltPayoutlist/${id}`)
+      .then((res) => {
+        // console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   async componentDidMount() {
-    // let { id } = this.props.match.params;
-
     await axiosConfig.get(`/user/PayoutList`).then((response) => {
       let rowData = response.data.data;
       console.log(rowData);
-      this.setState({ rowData });
+      let PendingWithdrawl = rowData?.filter(
+        (value) => value?.status === "Pending"
+      );
+      this.setState({ rowData: PendingWithdrawl });
     });
   }
 
-  async runthisfunction(id) {
-    console.log(id);
-    await axiosConfig.get(`/admin/dltPayoutlist/${id}`).then(
-      (response) => {
-        console.log(response);
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
-  }
   onGridReady = (params) => {
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;

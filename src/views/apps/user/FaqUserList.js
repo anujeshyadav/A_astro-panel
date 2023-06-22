@@ -47,7 +47,7 @@ class FaqUserList extends React.Component {
         // headerCheckboxSelection: true,
       },
       {
-        headerName: "Actions",
+        headerName: "Answer",
         field: "sortorder",
         width: 100,
         cellRendererFramework: (params) => {
@@ -55,14 +55,25 @@ class FaqUserList extends React.Component {
             <div className="actions cursor-pointer">
               <Route
                 render={({ history }) => (
-                  <Eye
-                    className="mr-50"
-                    size="25px"
-                    color="green"
-                    onClick={() =>
-                      history.push(`/app/user/viewone/${params.data._id}`)
-                    }
-                  />
+                  <>
+                    {/* <Eye
+                      className="mr-50"
+                      size="25px"
+                      color="green"
+                      onClick={() =>
+                        history.push(`/app/user/viewone/${params.data._id}`)
+                      }
+                    /> */}
+                    <Button
+                      onClick={() =>
+                        history.push(`/app/user/viewone/${params.data._id}`)
+                      }
+                      size="sm"
+                      color="primary"
+                    >
+                      Answer
+                    </Button>
+                  </>
                 )}
               />
               {/* <Route
@@ -75,6 +86,27 @@ class FaqUserList extends React.Component {
                   />
                 )}
               /> */}
+              <Trash2
+                className="mr-50"
+                size="25px"
+                color="red"
+                onClick={() => {
+                  let selectedData = this.gridApi.getSelectedRows();
+                  this.runthisfunction(params.data?._id);
+                  this.gridApi.updateRowData({ remove: selectedData });
+                }}
+              />
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "Delete",
+        field: "sortorder",
+        width: 100,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="actions cursor-pointer">
               <Trash2
                 className="mr-50"
                 size="25px"

@@ -114,19 +114,20 @@ class UserAskQuesList extends React.Component {
         },
       },
 
-      {
-        headerName: "Status",
-        field: "status",
-        filter: true,
-        width: 120,
-        cellRendererFramework: (params) => {
-          return (
-            <div>
-              <span>{params.data.status}</span>
-            </div>
-          );
-        },
-      },
+      // {
+      //   headerName: "Status",
+      //   field: "status",
+      //   filter: true,
+      //   width: 120,
+      //   cellRendererFramework: (params) => {
+
+      //     return (
+      //       <div>
+      //         <span>{params.data.status}</span>
+      //       </div>
+      //     );
+      //   },
+      // },
 
       {
         headerName: "Actions",

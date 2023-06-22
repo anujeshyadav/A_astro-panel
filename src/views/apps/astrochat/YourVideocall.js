@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Card, Col, FormGroup, Input, Label, Row } from "reactstrap";
 import AgoraUIKit, { layout } from "agora-react-uikit";
-import "./../../../assets/scss/video.scss";
+// import "./../../../assets/scss/video.scss";
 
 import axiosConfig from "../../../axiosConfig";
 import { history } from "../../../history";
@@ -9,25 +9,20 @@ import swal from "sweetalert";
 
 function YourVideocall() {
   const [videoCall, setVideoCall] = useState(false);
-  const [channelname, setchannel] = useState("");
+
   const [channelNamecreated, setchannelName] = useState("");
   const [Status, setStatus] = useState("");
   const [Token, setToken] = useState("");
   const [Addcall, setAddcall] = useState(false);
 
-  const [view, setview] = useState(false);
-  const [listofchannel, setlistofchannel] = useState();
-
   const rtcProps = {
     // Pass your App ID here.
     appId: "7d1f07c76f9d46be86bc46a791884023",
-    // Set the channel name.
+
     // channel: "anujesh",
     channel: channelNamecreated,
     // Pass your temp token here.
-    // token:
-    //   "0067d1f07c76f9d46be86bc46a791884023IAB5FVqr9cmIzH4opLCsVqglu9vtMjTK/T1tWsNzIU0EaUlEne4AAAAAEAAk4o61UgtnZAEAAQByRmZk",
-    token: Token || localStorage.getItem("astrotokenforvideocall"),
+    token: (Token && Token) || localStorage.getItem("astrotokenforvideocall"),
 
     // Set the user ID.
     uid: 0,
@@ -136,9 +131,14 @@ function YourVideocall() {
         </Row>
         <Row>
           {videoCall && Status === "Active" ? (
-            <div style={{ display: "flex", width: "100vw", height: "80vh" }}>
-              <AgoraUIKit rtcProps={rtcProps} callbacks={callbacks} />
-            </div>
+            <>
+              <div style={{ display: "flex", width: "90vw", height: "80vh" }}>
+                <AgoraUIKit rtcProps={rtcProps} callbacks={callbacks} />
+              </div>
+              {/* <div style={{ display: "flex", width: "100vw", height: "80vh" }}>
+                <AgoraUIKit rtcProps={rtcProps} callbacks={callbacks} />
+              </div> */}
+            </>
           ) : (
             <>
               {Addcall === true ? (

@@ -45,62 +45,62 @@ class InTakeList extends React.Component {
         // headerCheckboxSelectionFilteredOnly: true,
         // headerCheckboxSelection: true,
       },
-      // {
-      //   headerName: "Action",
-      //   field: "sortorder",
-      //   width: 130,
-      //   cellRendererFramework: (params) => {
-      //     return (
-      //       <div className="actions cursor-pointer">
-      //         <Button
-      //           onClick={() => this.handlebirthchart(params?.data)}
-      //           color="success"
-      //           size="sm"
-      //         >
-      //           BirthChart
-      //         </Button>
-      //         {/* <Route
-      //           render={({ history }) => (
-      //             <Eye
-      //               className="mr-50"
-      //               size="25px"
-      //               color="green"
-      //               onClick={() =>
-      //                 history.push(
-      //                   `/app/userride/viewUserRide/${params.data._id}`
-      //                 )
-      //               }
-      //             />
-      //           )}
-      //         /> */}
-      //         {/* <Route
-      //           render={({ history }) => (
-      //             <Edit
-      //               className="mr-50"
-      //               size="25px"
-      //               color="blue"
-      //               onClick={() =>
-      //                 history.push(
-      //                   `/app/astrology/editAstrologer/${params.data._id}`
-      //                 )
-      //               }
-      //             />
-      //           )}
-      //         /> */}
-      //         {/* <Trash2
-      //           className="mr-50"
-      //           size="25px"
-      //           color="red"
-      //           onClick={() => {
-      //             let selectedData = this.gridApi.getSelectedRows();
-      //             this.runthisfunction(params.data._id);
-      //             this.gridApi.updateRowData({ remove: selectedData });
-      //           }}
-      //         /> */}
-      //       </div>
-      //     );
-      //   },
-      // },
+      {
+        headerName: "Action",
+        field: "sortorder",
+        width: 130,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="actions cursor-pointer">
+              {/* <Button
+                onClick={() => this.handlebirthchart(params?.data)}
+                color="success"
+                size="sm"
+              >
+                BirthChart
+              </Button> */}
+              {/* <Route
+                render={({ history }) => (
+                  <Eye
+                    className="mr-50"
+                    size="25px"
+                    color="green"
+                    onClick={() =>
+                      history.push(
+                        `/app/userride/viewUserRide/${params.data._id}`
+                      )
+                    }
+                  />
+                )}
+              /> */}
+              {/* <Route
+                render={({ history }) => (
+                  <Edit
+                    className="mr-50"
+                    size="25px"
+                    color="blue"
+                    onClick={() =>
+                      history.push(
+                        `/app/astrology/editAstrologer/${params.data._id}`
+                      )
+                    }
+                  />
+                )}
+              /> */}
+              <Trash2
+                className="mr-50"
+                size="25px"
+                color="red"
+                onClick={() => {
+                  let selectedData = this.gridApi.getSelectedRows();
+                  this.runthisfunction(params.data._id);
+                  this.gridApi.updateRowData({ remove: selectedData });
+                }}
+              />
+            </div>
+          );
+        },
+      },
 
       {
         headerName: "Name",
@@ -116,32 +116,6 @@ class InTakeList extends React.Component {
         },
       },
 
-      // {
-      //   headerName: "Email",
-      //   field: "email	",
-      //   filter: true,
-      //   width: 120,
-      //   cellRendererFramework: (params) => {
-      //     return (
-      //       <div className="d-flex align-items-center cursor-pointer">
-      //         <span>{params.data.userid?.email}</span>
-      //       </div>
-      //     );
-      //   },
-      // },
-      // {
-      //   headerName: "Mobile No.",
-      //   field: "mobile",
-      //   filter: true,
-      //   width: 120,
-      //   cellRendererFramework: (params) => {
-      //     return (
-      //       <div>
-      //         <span>{params.data.userid?.mobile}</span>
-      //       </div>
-      //     );
-      //   },
-      // },
       {
         headerName: "Gender",
         field: "gender",
@@ -318,7 +292,7 @@ class InTakeList extends React.Component {
       .then((response) => {
         let rowData = response.data.data;
         console.log(rowData);
-        this.setState({ rowData });
+        this.setState({ rowData: rowData.reverse() });
       });
   }
 
@@ -373,7 +347,7 @@ class InTakeList extends React.Component {
                 <Row className="m-2">
                   <Col>
                     <h1 sm="6" className="float-left">
-                      Conversion in Take List
+                      Conversation in Take List
                     </h1>
                   </Col>
                   {/* <Col>

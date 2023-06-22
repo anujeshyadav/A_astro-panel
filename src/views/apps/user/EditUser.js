@@ -39,20 +39,18 @@ export class EditCustomer extends Component {
   componentDidMount() {
     console.log(this.props.match.params);
     let { id } = this.props.match.params;
-    axiosConfig
-      .get(`/getonecustomer/${id}`)
-      .then((response) => {
-        console.log(response);
-        this.setState({
-            first_name: "",
-            last_name: "",
-            customer_email: "",
-            mobile_no: "",
-            sortorder: "",
-            selectedFile: null,
-            status: response.data.data.status,
-        });
-      })
+    axiosConfig.get(`/getonecustomer/${id}`).then((response) => {
+      console.log(response);
+      this.setState({
+        first_name: "",
+        last_name: "",
+        customer_email: "",
+        mobile_no: "",
+        sortorder: "",
+        selectedFile: null,
+        status: response.data.data.status,
+      });
+    });
     //   .catch((error) => {
     //     console.log(error);
     //   });
@@ -98,7 +96,7 @@ export class EditCustomer extends Component {
     // }
     let { id } = this.props.match.params;
     axiosConfig
-      .post(`/view_onecust/${id}`,data )
+      .post(`/view_onecust/${id}`, data)
       .then((response) => {
         console.log(response);
         this.props.history.push("/app/customer/customerList");
@@ -111,10 +109,10 @@ export class EditCustomer extends Component {
     return (
       <div>
         <Breadcrumbs
-            breadCrumbTitle="Customer"
-            breadCrumbParent="Home"
-            breadCrumbActive="Edit Customer "
-          />
+          breadCrumbTitle="Customer"
+          breadCrumbParent="Home"
+          breadCrumbActive="Edit Customer "
+        />
         <Card>
           <Row className="m-2">
             <Col>
@@ -123,19 +121,20 @@ export class EditCustomer extends Component {
               </h1>
             </Col>
             <Col>
-            <Route render={({ history}) => (
-              <Button
-                className=" btn btn-danger float-right"
-                onClick={() => history.push("/app/customer/customerList")}
-              >
-                Back
-                </Button>
+              <Route
+                render={({ history }) => (
+                  <Button
+                    className=" btn btn-danger float-right"
+                    onClick={() => history.push("/app/customer/customerList")}
+                  >
+                    Back
+                  </Button>
                 )}
               />
-              </Col>
+            </Col>
           </Row>
           <CardBody>
-          <Form className="m-1" onSubmit={this.submitHandler}>
+            <Form className="m-1" onSubmit={this.submitHandler}>
               <Row>
                 <Col lg="6" md="6" sm="6" className="mb-2">
                   <Label>first Name</Label>
@@ -145,8 +144,8 @@ export class EditCustomer extends Component {
                     name="first_name"
                     placeholder="Enter First Name"
                     value={this.state.first_name}
-                    onChange={this.changeHandler}>
-                  </Input>
+                    onChange={this.changeHandler}
+                  ></Input>
                 </Col>
                 <Col lg="6" md="6" sm="6" className="mb-2">
                   <Label>Last Name</Label>
@@ -156,8 +155,8 @@ export class EditCustomer extends Component {
                     name="last_name"
                     placeholder="Enter Last Name"
                     value={this.state.last_name}
-                    onChange={this.changeHandler}>
-                  </Input>
+                    onChange={this.changeHandler}
+                  ></Input>
                 </Col>
                 <Col lg="6" md="6" sm="6" className="mb-2">
                   <Label> Email</Label>
@@ -167,8 +166,8 @@ export class EditCustomer extends Component {
                     name="customer_email"
                     placeholder="Email"
                     value={this.state.customer_email}
-                    onChange={this.changeHandler} >
-                  </Input>
+                    onChange={this.changeHandler}
+                  ></Input>
                 </Col>
 
                 <Col lg="6" md="6" sm="6" className="mb-2">
@@ -179,86 +178,86 @@ export class EditCustomer extends Component {
                     name="mobile_no"
                     placeholder="Mobile No."
                     value={this.state.mobile_no}
-                    onChange={this.changeHandler}>
-                  </Input>
+                    onChange={this.changeHandler}
+                  ></Input>
                 </Col>
                 <Col lg="6" md="6" sm="6" className="mb-2">
                   <Label>DOB</Label>
-                    <Input
-                      required
-                      type="date"
-                      name="sortorder"
-                      placeholder="Enter Confirm  Password"
-                      value={this.state.sortorder}
-                      onChange={this.changeHandler}>
-                    </Input>
+                  <Input
+                    required
+                    type="date"
+                    name="sortorder"
+                    placeholder="Enter Confirm  Password"
+                    value={this.state.sortorder}
+                    onChange={this.changeHandler}
+                  ></Input>
                 </Col>
                 <Col lg="6" md="6" sm="6" className="mb-2">
                   <Label>Date Of Register</Label>
-                    <Input
-                      required
-                      type="date"
-                      name="sortorder"
-                      placeholder="Enter Confirm  Password"
-                      value={this.state.sortorder}
-                      onChange={this.changeHandler}>
-                    </Input>
+                  <Input
+                    required
+                    type="date"
+                    name="sortorder"
+                    placeholder="Enter Confirm  Password"
+                    value={this.state.sortorder}
+                    onChange={this.changeHandler}
+                  ></Input>
                 </Col>
               </Row>
               <Row>
-              <Col lg="6" md="6" sm="6" className="mb-2">
+                <Col lg="6" md="6" sm="6" className="mb-2">
                   <Label>Password </Label>
-                    <Input
-                      required
-                      type="text"
-                      name="sortorder"
-                      placeholder="Enter Password"
-                      value={this.state.sortorder}
-                      onChange={this.changeHandler}>
-                    </Input>
+                  <Input
+                    required
+                    type="text"
+                    name="sortorder"
+                    placeholder="Enter Password"
+                    value={this.state.sortorder}
+                    onChange={this.changeHandler}
+                  ></Input>
                 </Col>
                 <Col lg="6" md="6" sm="6" className="mb-2">
                   <Label>Confirm Password </Label>
-                    <Input
-                      required
-                      type="text"
-                      name="sortorder"
-                      placeholder="Enter Confirm  Password"
-                      value={this.state.sortorder}
-                      onChange={this.changeHandler}>
-                    </Input>
+                  <Input
+                    required
+                    type="text"
+                    name="sortorder"
+                    placeholder="Enter Confirm  Password"
+                    value={this.state.sortorder}
+                    onChange={this.changeHandler}
+                  ></Input>
                 </Col>
+              </Row>
+              <Col lg="6" md="6" sm="6" className="mb-2">
+                <Label className="mb-1">Status</Label>
+                <div
+                  className="form-label-group"
+                  onChange={(e) => this.changeHandler1(e)}
+                >
+                  <input
+                    style={{ marginRight: "3px" }}
+                    type="radio"
+                    name="status"
+                    value="Active"
+                  />
+                  <span style={{ marginRight: "20px" }}>Active</span>
 
-            </Row>
-                <Col lg="6" md="6" sm="6" className="mb-2">
-                  <Label className="mb-1">Status</Label>
-                  <div
-                    className="form-label-group"
-                    onChange={(e) => this.changeHandler1(e)}
-                  >
-                    <input
-                      style={{ marginRight: "3px" }}
-                      type="radio"
-                      name="status"
-                      value="Active"
-                    />
-                    <span style={{ marginRight: "20px" }}>Active</span>
-
-                    <input
-                      style={{ marginRight: "3px" }}
-                      type="radio"
-                      name="status"
-                      value="Inactive"
-                    />
-                    <span style={{ marginRight: "3px" }}>Inactive</span>
-                  </div>
-                </Col>
+                  <input
+                    style={{ marginRight: "3px" }}
+                    type="radio"
+                    name="status"
+                    value="Inactive"
+                  />
+                  <span style={{ marginRight: "3px" }}>Inactive</span>
+                </div>
+              </Col>
               <Row>
                 <Col lg="6" md="6" sm="6" className="mb-2">
                   <Button.Ripple
                     color="primary"
                     type="submit"
-                    className="mr-1 mb-1">
+                    className="mr-1 mb-1"
+                  >
                     Add User
                   </Button.Ripple>
                 </Col>

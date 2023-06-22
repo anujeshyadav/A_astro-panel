@@ -34,14 +34,14 @@ const navigationConfig = [
     navLink: "/app/historycall/callhistory",
   },
 
-  {
-    id: "conversationList",
-    title: "Conversation List",
-    type: "item",
-    icon: <Icon.MessageCircle size={20} />,
-    permissions: ["admin", "editor"],
-    navLink: "/app/conversation/conversationList",
-  },
+  // {
+  //   id: "conversationList",
+  //   title: "Conversation List",
+  //   type: "item",
+  //   icon: <Icon.MessageCircle size={20} />,
+  //   permissions: ["admin", "editor"],
+  //   navLink: "/app/conversation/conversationList",
+  // },
 
   {
     id: "conversationintakeList",

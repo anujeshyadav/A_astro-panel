@@ -49,15 +49,13 @@ class ViewAskQuestion extends React.Component {
             breadCrumbActive="View Ask Question"
           />
           <Row>
-            <Col sm="12">
-          
-            </Col>
+            <Col sm="12"></Col>
           </Row>
           <Card className="overflow-hidden app-ecommerce-details">
             <Row className="m-2">
               <Col>
                 <h1 col-sm-6 className="float-left">
-                View Ask Question
+                  View Ask Question
                 </h1>
               </Col>
               <Col>
@@ -66,9 +64,7 @@ class ViewAskQuestion extends React.Component {
                     <Button
                       className=" btn btn-danger float-right"
                       onClick={() =>
-                        history.push(
-                          "/app/askquestion/uerAskQuesList"
-                        )
+                        history.push("/app/askquestion/useraskqueslist")
                       }
                     >
                       Back
@@ -78,24 +74,18 @@ class ViewAskQuestion extends React.Component {
               </Col>
             </Row>
             <CardBody className="pb-0">
-              
               <Row className="mb-5 mt-2">
                 <Col md="6" sm="12" className="mb-4">
                   <h4>Question</h4>
                   <h6 className=""> {this.state.data.question}</h6>
                 </Col>
                 <Col md="6" sm="12" className="mb-4">
-                 
                   {/* <h6 className=""> {this.state.data?.rashiId?.rashi_title}</h6> */}
                 </Col>
                 <Col md="6" sm="12" className="mb-4">
                   <h4>Answer</h4>
-                  <h6 className="">
-                    {" "}
-                    {this.state.data.answer}
-                  </h6>
+                  <h6 className=""> {this.state.data.answer}</h6>
                 </Col>
-               
               </Row>
             </CardBody>
           </Card>
