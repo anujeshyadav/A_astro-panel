@@ -3,12 +3,7 @@ import { Button, Card, Col, FormGroup, Input, Label, Row } from "reactstrap";
 import AgoraUIKit from "agora-react-uikit";
 import LiveChat from "./LiveChat";
 import "./../../../assets/scss/video.scss";
-import Customvideo from "./Customvideo";
 import axiosConfig from "../../../axiosConfig";
-import { history } from "../../../history";
-import swal from "sweetalert";
-
-import VideoCalls from "./VideoCalls";
 
 function YourliveStream() {
   const [videoCall, setVideoCall] = useState(false);

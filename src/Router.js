@@ -494,7 +494,7 @@ class AppRouter extends React.Component {
             <AppRoute path="/videocall" component={videocall} />
             <AppRoute path="/liveastro" component={liveastro} />
             <AppRoute
-              path="/astrovideocall"
+              path="/astrovideocall/:id"
               component={videocallYour}
               fullLayout
             />

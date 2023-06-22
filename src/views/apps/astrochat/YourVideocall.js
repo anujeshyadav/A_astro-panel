@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Card, Col, FormGroup, Input, Label, Row } from "reactstrap";
 import AgoraUIKit, { layout } from "agora-react-uikit";
+import { useParams } from "react-router-dom";
 // import "./../../../assets/scss/video.scss";
 
 import axiosConfig from "../../../axiosConfig";
@@ -9,12 +10,15 @@ import swal from "sweetalert";
 
 function YourVideocall() {
   const [videoCall, setVideoCall] = useState(false);
-
   const [channelNamecreated, setchannelName] = useState("");
   const [Status, setStatus] = useState("");
   const [Token, setToken] = useState("");
   const [Addcall, setAddcall] = useState(false);
+  const param = useParams();
 
+  useEffect(() => {
+    console.log(param.id);
+  }, []);
   const rtcProps = {
     // Pass your App ID here.
     appId: "7d1f07c76f9d46be86bc46a791884023",
@@ -55,8 +59,6 @@ function YourVideocall() {
           if (res.data.channelName && res.data.astroAccount) {
             setAddcall(true);
           }
-
-          // setVideoCall(true);
         })
         .catch((err) => {
           console.log(err);
