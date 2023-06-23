@@ -81,7 +81,7 @@ class AnalyticsDashboard extends React.Component {
                   </h2>
                 </div>
               </Col>
-              <Col md="4">
+              {/* <Col md="4">
                 <div className="bg-t mtb-20">
                   <span className="ast-1">
                     <Icon.BarChart2 size={40} className="mr-50" />
@@ -91,9 +91,9 @@ class AnalyticsDashboard extends React.Component {
                     <span className="ast-4">50</span>
                   </h2>
                 </div>
-              </Col>
+              </Col> */}
               <br></br>
-              <Col md="4">
+              {/* <Col md="4">
                 <div className="bg-s mb-20">
                   <span className="ast-1">
                     <Icon.BarChart2 size={40} className="mr-50" />
@@ -103,9 +103,9 @@ class AnalyticsDashboard extends React.Component {
                     <span className="ast-4">67</span>
                   </h2>
                 </div>
-              </Col>
+              </Col> */}
               <br></br>
-              <Col md="4">
+              {/* <Col md="4">
                 <div className="bg-p mb-20">
                   <span className="ast-1">
                     <Icon.BarChart2 size={40} className="mr-50" />
@@ -116,7 +116,7 @@ class AnalyticsDashboard extends React.Component {
                     <span className="ast-4">70</span>
                   </h2>
                 </div>
-              </Col>
+              </Col> */}
             </Row>
           </CardBody>
         </Card>

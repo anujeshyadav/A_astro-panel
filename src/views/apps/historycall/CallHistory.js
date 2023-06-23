@@ -175,7 +175,7 @@ class CallHistory extends React.Component {
       .get(`/user/astroCallHistory/${astroId}`)
       .then((response) => {
         let rowData = response.data.data;
-        // console.log(rowData);
+        console.log(rowData);
         this.setState({ rowData: rowData.reverse() });
       });
 
