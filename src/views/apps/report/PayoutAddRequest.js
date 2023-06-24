@@ -56,7 +56,7 @@ export class PayoutAddRequest extends Component {
       let payload = {
         astroId: astroId,
         transactionId: new Date().getTime(),
-        payout_amt: this.state.RequestedAmount,
+        reqsted_amt: this.state.RequestedAmount,
         status: "Pending",
       };
       axiosConfig

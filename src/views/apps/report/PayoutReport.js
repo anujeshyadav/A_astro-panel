@@ -48,14 +48,15 @@ class PayoutReport extends React.Component {
       },
 
       {
-        headerName: "Payout Request Amount",
+        headerName: "Requested Amount",
         field: "payout_amt",
         filter: true,
         width: 200,
         cellRendererFramework: (params) => {
+          console.log(params);
           return (
             <div>
-              <span>{params.data.payout_amt}</span>
+              <span>{params.data?.reqsted_amt}</span>
             </div>
           );
         },
