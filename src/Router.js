@@ -216,6 +216,10 @@ const PackageList = lazy(() => import("./views/apps/poojapackage/PackageList"));
 const AddPackage = lazy(() => import("./views/apps/poojapackage/AddPackage"));
 const EditPackage = lazy(() => import("./views/apps/poojapackage/EditPackage"));
 const CallReport = lazy(() => import("./views/apps/report/CallReport"));
+const VideocallReport = lazy(() =>
+  import("./views/apps/report/VideocallReport")
+);
+const ChatReport = lazy(() => import("./views/apps/report/ChatReport"));
 const EarningReport = lazy(() => import("./views/apps/report/EarningReport"));
 const PayoutReport = lazy(() => import("./views/apps/report/PayoutReport"));
 const PayoutAddRequest = lazy(() =>
@@ -616,6 +620,11 @@ class AppRouter extends React.Component {
               component={EditPackage}
             />
             <AppRoute path="/app/report/callreport" component={CallReport} />
+            <AppRoute
+              path="/app/report/videocallreport"
+              component={VideocallReport}
+            />
+            <AppRoute path="/app/report/chatreport" component={ChatReport} />
             <AppRoute
               path="/app/report/earningreport"
               component={EarningReport}

@@ -1,16 +1,22 @@
 import React from "react";
 
 import "../../../assets/scss/pages/astrochat.scss";
+import { CloudLightning } from "react-feather";
 
 class ChatAppList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       Index: "",
-
+      connecting_usrid: "",
       userChatList: this.props.userChatList,
       roomid: "",
     };
+  }
+  componentDidMount() {
+    let newuser = sessionStorage.getItem("Chat_or_video_userid");
+    console.log(newuser);
+    this.setState({ connecting_usrid: newuser });
   }
 
   render() {

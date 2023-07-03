@@ -73,32 +73,32 @@ class CallHistory extends React.Component {
         },
       },
 
-      {
-        headerName: "Email",
-        field: "email	",
-        filter: true,
-        width: 200,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <span>{params.data?.userid?.email}</span>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "Mobile No.",
-        field: "mobile	",
-        filter: true,
-        width: 200,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <span>{params.data?.To}</span>
-            </div>
-          );
-        },
-      },
+      // {
+      //   headerName: "Email",
+      //   field: "email	",
+      //   filter: true,
+      //   width: 200,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <span>{params.data?.userid?.email}</span>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "Mobile No.",
+      //   field: "mobile	",
+      //   filter: true,
+      //   width: 200,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <span>{params.data?.To}</span>
+      //       </div>
+      //     );
+      //   },
+      // },
       {
         headerName: "Date",
         field: "date",
@@ -112,19 +112,19 @@ class CallHistory extends React.Component {
           );
         },
       },
-      {
-        headerName: "Time",
-        field: "time",
-        filter: true,
-        width: 200,
-        cellRendererFramework: (params) => {
-          return (
-            <div>
-              <span>{params.data?.StartTime.split(" ")[1]}</span>
-            </div>
-          );
-        },
-      },
+      // {
+      //   headerName: "Time",
+      //   field: "time",
+      //   filter: true,
+      //   width: 200,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div>
+      //         <span>{params.data?.StartTime.split(" ")[1]}</span>
+      //       </div>
+      //     );
+      //   },
+      // },
       {
         headerName: "Duration",
         field: "Duration",
@@ -133,20 +133,20 @@ class CallHistory extends React.Component {
         cellRendererFramework: (params) => {
           return (
             <div>
-              <span>{params.data?.Duration}</span>
+              <span>{params.data?.Duration} Sec</span>
             </div>
           );
         },
       },
       {
-        headerName: "Amount Deducted",
+        headerName: "Amount Credited",
         field: "Amount",
         filter: true,
         width: 200,
         cellRendererFramework: (params) => {
           return (
             <div>
-              <span>{params.data?.userid?.deductedAmt}</span>
+              <span>{params.data?.astroCredited}</span>
             </div>
           );
         },
@@ -160,7 +160,7 @@ class CallHistory extends React.Component {
         cellRendererFramework: (params) => {
           return (
             <div>
-              <span>Completed</span>
+              <span>{params?.data?.Status}</span>
             </div>
           );
         },
@@ -176,12 +176,8 @@ class CallHistory extends React.Component {
       .then((response) => {
         let rowData = response.data.data;
         console.log(rowData);
-        this.setState({ rowData: rowData.reverse() });
+        this.setState({ rowData: rowData });
       });
-
-    await axiosConfig.get("/admin/allcustomer").then((response) => {
-      let rowData = response.data.data;
-    });
   }
 
   async runthisfunction(id) {

@@ -17,6 +17,7 @@ class ChatApp extends React.Component {
       userChatList: [],
       userId: "",
       astroId: "",
+      userData: null,
       msg: "",
       roomId: "",
       roomChatData: [],
@@ -93,9 +94,16 @@ class ChatApp extends React.Component {
     }
   }
 
-  getChatRoomId = async (user, i) => {
-    this.setState({ ModdleToggle: true });
+  getChatdata = () => {
+    setInterval(() => {
+      this.getChatRoomId(this.state.userData, this.state.indexValue);
+    }, 4000);
+  };
 
+  getChatRoomId = async (user, i) => {
+    console.log(user, i);
+    this.setState({ userData: user });
+    this.setState({ ModdleToggle: true });
     let userIds = [user?.userid?._id];
     this.setState({
       userId: user?.userid?._id,
@@ -107,6 +115,7 @@ class ChatApp extends React.Component {
       .get(`/user/allchatwithAstro/${user?.astroid?._id}`)
       .then((response) => {
         console.log(response?.data?.data);
+        this.getChatdata();
         if (response.data.status === true) {
           console.log("allchat", response?.data.data);
 

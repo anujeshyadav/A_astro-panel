@@ -181,6 +181,7 @@ class Register extends React.Component {
   };
   stepperSecond = () => {
     const { otp, mobile } = this.state;
+    console.log(otp, mobile);
     axiosConfig
       .post("/user/verifyotp", {
         otp: parseInt(otp, mobile) !== isNaN ? parseInt(otp) : "null",

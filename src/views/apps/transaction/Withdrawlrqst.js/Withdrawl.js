@@ -157,7 +157,7 @@ class Withdrawl extends React.Component {
   async componentDidMount() {
     await axiosConfig.get(`/user/PayoutList`).then((response) => {
       let rowData = response.data.data;
-
+      console.log(rowData);
       let PendingWithdrawl = rowData?.filter(
         (value) => value?.status === "Success"
       );
@@ -205,7 +205,7 @@ class Withdrawl extends React.Component {
                 <Row className="m-2">
                   <Col>
                     <h1 sm="6" className="float-left">
-                      Withdrawal Request
+                      Withdrawal Approved
                     </h1>
                   </Col>
                   {/* <Col>

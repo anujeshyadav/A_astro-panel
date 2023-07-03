@@ -58,33 +58,32 @@ class LoginJWT extends React.Component {
   };
   handleOtp = (e) => {
     e.preventDefault();
-    axiosConfig
-      .post("/user/loginVerify", {
-        mobile: this.state.mobile,
-        otp: this.state.otp,
-      })
+    if (this.state.otp) {
+      axiosConfig
+        .post("/user/verifyotp", {
+          mobile: this.state.mobile,
+          otp: this.state.otp,
+        })
 
-      .then((response) => {
-        // console.log(response.data);
-        // console.log(response.data._id);
-        if (response.data.msg === "otp verified") {
-          swal("Login Successfull");
-          localStorage.setItem("astroId", response.data._id);
-          localStorage.setItem("astroData", JSON.stringify(response.data));
-          // localStorage.setItem("user_id", response.data.data._id);
-          // this.props.history.push("/");
-          window.location.replace("/#/");
-          // swal("Login Successfull");
-        }
-      })
-      .catch((error) => {
-        console.log(error.response.data._id);
-        swal(
-          "error!",
-          "Invalied! Please enter valied Phone No. or Password",
-          "error"
-        );
-      });
+        .then((response) => {
+          if (response.data.msg === "otp verified") {
+            swal("Login Successfull");
+            localStorage.setItem("astroId", response.data._id);
+            localStorage.setItem("astroData", JSON.stringify(response.data));
+            // localStorage.setItem("user_id", response.data.data._id);
+            // this.props.history.push("/");
+            window.location.replace("/#/");
+          }
+        })
+        .catch((error) => {
+          console.log(error.response.data._id);
+          swal(
+            "error!",
+            "Invalied! Please enter valied Phone No. or Password",
+            "error"
+          );
+        });
+    } else swal("Enter Otp First");
   };
 
   render() {

@@ -58,6 +58,7 @@ function YourVideocall() {
           localStorage.setItem("astrotokenforvideocall", res.data.astroAccount);
           if (res.data.channelName && res.data.astroAccount) {
             setAddcall(true);
+            setVideoCall(true);
           }
         })
         .catch((err) => {
@@ -92,7 +93,7 @@ function YourVideocall() {
           <Col lg="4" md="4" sm="4">
             <div className="container mt-2 mb-1">
               <Button onClick={(e) => handlestatus(e)} color="success">
-                VideoCall
+                Join VideoCall
               </Button>
             </div>
           </Col>

@@ -20,7 +20,7 @@ import { AgGridReact } from "ag-grid-react";
 import { Route } from "react-router-dom";
 import axios from "axios";
 //import classnames from "classnames";
-// import axiosConfig from "../../../axiosConfig";
+import axiosConfig from "../../../axiosConfig";
 import Breadcrumbs from "../../../components/@vuexy/breadCrumbs/BreadCrumb";
 
 class CallReport extends React.Component {
@@ -48,48 +48,14 @@ class CallReport extends React.Component {
       },
 
       {
-        headerName: "Name",
-        field: "firstname",
+        headerName: "Status",
+        field: "Status",
         filter: true,
         width: 200,
         cellRendererFramework: (params) => {
           return (
             <div>
-              <span>
-                {params.data.firstname} {params.data.lastname}
-              </span>
-            </div>
-          );
-        },
-      },
-
-      {
-        headerName: "Caller ID",
-        field: "callerid",
-        filter: true,
-        width: 200,
-        cellRendererFramework: (params) => {
-          return (
-            <div>
-              <span>
-                {params.data.firstname} {params.data.lastname}
-              </span>
-            </div>
-          );
-        },
-      },
-
-      {
-        headerName: "Date",
-        field: "date",
-        filter: true,
-        width: 200,
-        cellRendererFramework: (params) => {
-          return (
-            <div>
-              <span>
-                {params.data.firstname} {params.data.lastname}
-              </span>
+              <span>{params.data?.Status}</span>
             </div>
           );
         },
@@ -103,94 +69,119 @@ class CallReport extends React.Component {
         cellRendererFramework: (params) => {
           return (
             <div>
-              <span>
-                {params.data.firstname} {params.data.lastname}
-              </span>
+              {params?.data?.userdeductedAmt === 0 ? (
+                <>
+                  <span>Not Answered</span>
+                </>
+              ) : (
+                <>
+                  <span>{params.data?.Duration} Second</span>
+                </>
+              )}
             </div>
           );
         },
       },
-
-
       {
-        headerName: "Mobile No.",
-        field: "mobile",
+        headerName: "UserName",
+        field: "duration",
         filter: true,
         width: 200,
         cellRendererFramework: (params) => {
           return (
             <div>
-              <span>{params.data.mobile}</span>
+              <>
+                <span>{params.data?.userid?.fullname}</span>
+              </>
             </div>
           );
         },
       },
 
       {
-        headerName: "Actions",
-        field: "sortorder",
+        headerName: "Date",
+        field: "date",
+        filter: true,
         width: 200,
         cellRendererFramework: (params) => {
           return (
-            <div className="actions cursor-pointer">
-              <Route
-                render={({ history }) => (
-                  <Eye
-                    className="mr-50"
-                    size="25px"
-                    color="green"
-                    onClick={() =>
-                      history.push(
-                        `/app/customer/viewCustomer/${params.data._id}`
-                      )
-                    }
-                  />
-                )}
-              />
-              <Route
-                render={({ history }) => (
-                  <Edit
-                    className="mr-50"
-                    size="25px"
-                    color="blue"
-                    onClick={() => history.push("/app/customer/editCustomer")}
-                  />
-                )}
-              />
-              <Trash2
-                className="mr-50"
-                size="25px"
-                color="red"
-                onClick={() => {
-                  let selectedData = this.gridApi.getSelectedRows();
-                  this.runthisfunction(params.data._id);
-                  this.gridApi.updateRowData({ remove: selectedData });
-                }}
-              />
+            <div>
+              <span>{params.data?.createdAt.split("T")[0]}</span>
             </div>
           );
         },
       },
+
+      {
+        headerName: "Deducted Amount",
+        field: "Deducted Amount",
+        filter: true,
+        width: 200,
+        cellRendererFramework: (params) => {
+          return (
+            <div>
+              <span>{params.data?.userdeductedAmt}</span>
+            </div>
+          );
+        },
+      },
+
+      // {
+      //   headerName: "Actions",
+      //   field: "sortorder",
+      //   width: 200,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="actions cursor-pointer">
+      //         <Route
+      //           render={({ history }) => (
+      //             <Eye
+      //               className="mr-50"
+      //               size="25px"
+      //               color="green"
+      //               onClick={() =>
+      //                 history.push(
+      //                   `/app/customer/viewCustomer/${params.data._id}`
+      //                 )
+      //               }
+      //             />
+      //           )}
+      //         />
+      //         <Route
+      //           render={({ history }) => (
+      //             <Edit
+      //               className="mr-50"
+      //               size="25px"
+      //               color="blue"
+      //               onClick={() => history.push("/app/customer/editCustomer")}
+      //             />
+      //           )}
+      //         />
+      //         <Trash2
+      //           className="mr-50"
+      //           size="25px"
+      //           color="red"
+      //           onClick={() => {
+      //             let selectedData = this.gridApi.getSelectedRows();
+      //             this.runthisfunction(params.data._id);
+      //             this.gridApi.updateRowData({ remove: selectedData });
+      //           }}
+      //         />
+      //       </div>
+      //     );
+      //   },
+      // },
     ],
   };
-  async componentDidMount() {
+  componentDidMount() {
     let { id } = this.props.match.params;
-
-    await axios
-      .get(`http://3.108.185.7:4000/user/view_onecust/${id}`)
-      .then((response) => {
-        let rowData = response.data.data;
-        console.log(rowData);
-        this.setState({ rowData });
-      });
-
-    await axios
-      .get("http://3.108.185.7:4000/admin/allcustomer")
-      .then((response) => {
-        let rowData = response.data.data;
-        console.log(rowData);
-        this.setState({ rowData });
-      });
+    let astroid = localStorage.getItem("astroId");
+    console.log(astroid);
+    axiosConfig.get(`/user/astroCallHistory/${astroid}`).then((response) => {
+      let rowData = response.data.data;
+      console.log(rowData);
+      this.setState({ rowData });
+    });
   }
 
   async runthisfunction(id) {
@@ -228,14 +219,13 @@ class CallReport extends React.Component {
   render() {
     const { rowData, columnDefs, defaultColDef } = this.state;
     return (
-      console.log(rowData),
-      (
-        <div>
-          <Breadcrumbs
-            breadCrumbTitle="Call Report"
-            breadCrumbParent="Home"
-            breadCrumbActive="Call Report"
-          />
+      // console.log(rowData),
+      <div>
+        <Breadcrumbs
+          breadCrumbTitle="Call Report"
+          breadCrumbParent="Home"
+          breadCrumbActive="Call Report"
+        />
         <Row className="app-user-list">
           <Col sm="12"></Col>
           <Col sm="12">
@@ -243,7 +233,7 @@ class CallReport extends React.Component {
               <Row className="m-2">
                 <Col>
                   <h1 sm="6" className="float-left">
-                    Call Report
+                    Call Reports
                   </h1>
                 </Col>
                 {/* <Col>
@@ -356,8 +346,7 @@ class CallReport extends React.Component {
             </Card>
           </Col>
         </Row>
-        </div>
-      )
+      </div>
     );
   }
 }

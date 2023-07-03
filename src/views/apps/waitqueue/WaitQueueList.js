@@ -28,6 +28,7 @@ class WaitQueueList extends React.Component {
     paginationPageSize: 20,
     currenPageSize: "",
     getPageSize: "",
+    setText: null,
     defaultColDef: {
       sortable: true,
       editable: true,
@@ -49,18 +50,23 @@ class WaitQueueList extends React.Component {
         headerName: "Action",
         field: "Action",
         filter: true,
-
         width: 200,
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
               <Button
-                onClick={() => this.handleJoin(params)}
+                onClick={() =>
+                  this.handleConnect(params?.data?.value?.callType, params)
+                }
                 className="mt-1"
                 color="success"
                 size="sm"
               >
-                Connect {params?.data?.type}
+                {this.state.setText ? (
+                  <>{this.state.setText}</>
+                ) : (
+                  <>{params?.data?.value?.callType}</>
+                )}
               </Button>
             </div>
           );
@@ -74,7 +80,20 @@ class WaitQueueList extends React.Component {
         cellRendererFramework: (params) => {
           return (
             <div>
-              <span>{params.data.userid?.fullname}</span>
+              <span>{params.data?.user?.fullname}</span>
+            </div>
+          );
+        },
+      },
+      {
+        headerName: "User Bal",
+        field: "balance",
+        filter: true,
+        width: 200,
+        cellRendererFramework: (params) => {
+          return (
+            <div>
+              <span>{params.data?.user?.amount}</span>
             </div>
           );
         },
@@ -85,55 +104,69 @@ class WaitQueueList extends React.Component {
         field: "type",
         filter: true,
         width: 200,
+
         cellRendererFramework: (params) => {
           return (
             <div className="d-flex align-items-center cursor-pointer">
-              <span>{params.data.type}</span>
+              <Button
+                onClick={() =>
+                  this.handleConnect(params?.data?.value?.callType, params)
+                }
+                size="sm"
+                color="primary"
+                className="mt-2"
+              >
+                {this.state.setText != null ? (
+                  <>{this.state.setText}</>
+                ) : (
+                  <>{params?.data?.value?.callType}</>
+                )}
+              </Button>
             </div>
           );
         },
       },
 
-      {
-        headerName: "Wait Queue",
-        field: "waiting_queue",
-        filter: true,
-        width: 200,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <span>{params.data.astroid?.waiting_queue}</span>
-            </div>
-          );
-        },
-      },
+      // {
+      //   headerName: "Wait Queue",
+      //   field: "waiting_queue",
+      //   filter: true,
+      //   width: 200,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <span>{params.data.astroid?.waiting_queue}</span>
+      //       </div>
+      //     );
+      //   },
+      // },
 
-      {
-        headerName: "Wait Time",
-        field: "waiting_tym",
-        filter: true,
-        width: 200,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <span>{params.data.astroid?.waiting_tym}</span>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "status",
-        field: "status",
-        filter: true,
-        width: 200,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <span>{params.data?.status}</span>
-            </div>
-          );
-        },
-      },
+      // {
+      //   headerName: "Wait Time",
+      //   field: "waiting_tym",
+      //   filter: true,
+      //   width: 200,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <span>{params.data?.astroid?.waiting_tym}</span>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "status",
+      //   field: "status",
+      //   filter: true,
+      //   width: 200,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <span>{params.data?.status}</span>
+      //       </div>
+      //     );
+      //   },
+      // },
 
       // {
       //   headerName: "Actions",
@@ -187,13 +220,29 @@ class WaitQueueList extends React.Component {
     console.log(data);
   };
 
+  handleConnect = (type, userdata) => {
+    if (type === "Chat") {
+      this.props.history.push("/app/astrochat/chatastro");
+    }
+    if (type === "VoiceCall") {
+      this.setState({ setText: "Calling" });
+      this.handleJoinCall(userdata.data);
+    }
+    if (type === "Video") {
+      let astrodata = JSON.parse(localStorage.getItem("astroData"));
+      this.props.history.push(`/astrovideocall/${astrodata?._id}`);
+    }
+  };
   handleJoinCall = (data) => {
+    console.log(data);
+    let astrodata = JSON.parse(localStorage.getItem("astroData"));
+
     // let bal = data?.userid?.amount;
     let obj = {
-      userid: data?.data?.userid?._id,
-      astroid: data?.data?.astroid?._id,
-      From: data?.data?.astroid?.mobile,
-      To: data?.data?.userid?.mobile,
+      userid: data?.value?.userId,
+      astroid: astrodata?._id,
+      From: astrodata?.mobile,
+      To: data?.user?.mobile,
     };
     axiosConfig
       .post(`/user/make_call`, obj)
@@ -217,15 +266,16 @@ class WaitQueueList extends React.Component {
     }
   };
   async componentDidMount() {
-    // let { id } = this.props.match.params;
-
     const astroId = localStorage.getItem("astroId");
     await axiosConfig
-      .get(`/user/wait_queue_list/${astroId}`)
+      .get(`/user/getWaitQueueList/${astroId}`)
       .then((response) => {
-        let rowData = response.data.data;
+        let rowData = response.data?.waitQueueList;
+        let reversedata = response.data?.waitQueueList.reverse();
+        console.log(reversedata);
         console.log(rowData);
-        this.setState({ rowData });
+        // this.setState({ rowData });
+        this.setState({ rowData: reversedata });
       });
   }
 

@@ -17,6 +17,10 @@ class AnalyticsDashboard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      rowData: "",
+      totalcall: "",
+      waitlist: "",
+
       total7sayplan: {},
       bsicplan: {},
       endtoend: {},
@@ -30,7 +34,32 @@ class AnalyticsDashboard extends React.Component {
     };
   }
 
-  componentDidMount() {}
+  async componentDidMount() {
+    const astroId = localStorage.getItem("astroId");
+    await axiosConfig
+      .get(`/user/wait_queue_list/${astroId}`)
+      .then((res) => {
+        console.log(res.data.data?.length);
+        this.setState({ waitlist: res.data.data?.length });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    await axiosConfig
+      .get(`/user/astroCallHistory/${astroId}`)
+      .then((response) => {
+        let rowData = response.data.data?.length;
+        this.setState({ totalcall: rowData });
+      });
+    await axiosConfig
+      .get(`/user/getAstroEarnings/${astroId}`)
+      .then((response) => {
+        let rowData = response.data.data?.today;
+        console.log(rowData);
+        this.setState({ rowData });
+      });
+  }
 
   render() {
     return (
@@ -54,7 +83,7 @@ class AnalyticsDashboard extends React.Component {
                   </span>
                   <h2 className="ast-2">
                     Total Request Users
-                    <span className="ast-4">50</span>
+                    <span className="ast-4">{this.state.waitlist}</span>
                   </h2>
                 </div>
               </Col>
@@ -65,7 +94,7 @@ class AnalyticsDashboard extends React.Component {
                   </span>
                   <h2 className="ast-2">
                     Total Call History
-                    <span className="ast-4">67</span>
+                    <span className="ast-4">{this.state.totalcall}</span>
                   </h2>
                 </div>
               </Col>
@@ -77,7 +106,7 @@ class AnalyticsDashboard extends React.Component {
                   <h2 className="ast-2">
                     {" "}
                     Total Earning
-                    <span className="ast-4">70</span>
+                    <span className="ast-4">{this.state.rowData}</span>
                   </h2>
                 </div>
               </Col>
