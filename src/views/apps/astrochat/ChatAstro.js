@@ -14,6 +14,7 @@ class ChatApp extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      tooglebtn: true,
       userChatList: [],
       userId: "",
       astroId: "",
@@ -33,14 +34,95 @@ class ChatApp extends React.Component {
     this.countDown = this.countDown.bind(this);
   }
 
+  handleaddBal = async () => {
+    let payload = {
+      userId: this.state.userId,
+      astroId: this.state.astroId,
+      type: "Chat",
+    };
+    console.log(payload);
+    await axiosConfig
+      .post(`/user/deductChatBalance`, payload)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err.response.data);
+      });
+  };
+  handleCloseChat = (e) => {
+    e.preventDefault();
+    let astroid = localStorage.getItem("astroId");
+    let userid = localStorage.getItem("CurrentChat_userid");
+    let value = {
+      userId: userid,
+      astroId: astroid,
+    };
+
+    axiosConfig
+      .post(`/user/changeStatus`, value)
+      .then((res) => {
+        console.log(res);
+        window.location.replace("/");
+      })
+      .catch((err) => {
+        console.log(err.response.data);
+      });
+  };
+
+  handleAddChat = async (e) => {
+    e.preventDefault();
+    if (this.state.msg !== "") {
+      this.setState({ tooglebtn: false });
+      let obj = {
+        reciver: this.state.userId,
+        msg: this.state.msg,
+      };
+      let userIds = [this.state.userId];
+      await axiosConfig
+        .post(`/user/add_chatroom/${this.state.astroId}`, obj)
+        .then(async (response) => {
+          console.log(response);
+          if (response.data.status === true) {
+            this.setState({ msg: "" });
+            await axiosConfig
+              .get(`/user/allchatwithAstro/${this.state.astroId}`)
+              .then((response1) => {
+                console.log(response1?.data?.data);
+                this.handleaddBal();
+                this.getChatdata();
+
+                if (response1.data.status === true) {
+                  let filteredArray = response1?.data?.data.filter(function (
+                    item
+                  ) {
+                    return (
+                      userIds.indexOf(item?.userid?._id || item?.reciver?._id) >
+                      -1
+                    );
+                  });
+                  this.setState({ roomChatData: filteredArray });
+                }
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          }
+        })
+
+        .catch((error) => {
+          console.log(error);
+        });
+    } else swal("Alert", "Input field is blank. Add Some Value");
+  };
   componentDidMount() {
     let astroId = localStorage.getItem("astroId");
 
     if (JSON.parse(localStorage.getItem("minute"))) {
       let minute = JSON.parse(localStorage.getItem("minute"));
       this.setState({ minutes: minute, seconds: minute * 60 });
-      this.startTimer();
-      this.secondsToTime(minute * 60);
+      // this.startTimer();
+      // this.secondsToTime(minute * 60);
     }
 
     console.log(astroId);
@@ -96,14 +178,14 @@ class ChatApp extends React.Component {
 
   getChatdata = () => {
     setInterval(() => {
-      this.getChatRoomId(this.state.userData, this.state.indexValue);
-    }, 4000);
+      this.getChatRoomIdnew(this.state.userData, this.state.indexValue);
+    }, 5000);
   };
 
-  getChatRoomId = async (user, i) => {
+  getChatRoomIdnew = (user, i) => {
     console.log(user, i);
     this.setState({ userData: user });
-    this.setState({ ModdleToggle: true });
+    // this.setState({ ModdleToggle: true });
     let userIds = [user?.userid?._id];
     this.setState({
       userId: user?.userid?._id,
@@ -111,11 +193,11 @@ class ChatApp extends React.Component {
       indexValue: i,
       astroId: user?.astroid?._id,
     });
-    await axiosConfig
+    axiosConfig
       .get(`/user/allchatwithAstro/${user?.astroid?._id}`)
       .then((response) => {
         console.log(response?.data?.data);
-        this.getChatdata();
+
         if (response.data.status === true) {
           console.log("allchat", response?.data.data);
 
@@ -132,10 +214,39 @@ class ChatApp extends React.Component {
         console.log(error);
       });
   };
+  getChatRoomId = async (user, i) => {
+    console.log(user, i);
+    this.setState({ userData: user });
+    this.setState({ ModdleToggle: true });
+    let userIds = [user?.userid?._id];
+    this.setState({
+      userId: user?.userid?._id,
+      roomId: user?.roomid,
+      indexValue: i,
+      astroId: user?.astroid?._id,
+    });
+    await axiosConfig
+      .get(`/user/allchatwithAstro/${user?.astroid?._id}`)
+      .then((response) => {
+        // console.log(response?.data?.data);
+        if (response.data.status === true) {
+          console.log("allchat", response?.data.data);
+          let filteredArray = response?.data?.data.filter(function (item) {
+            return (
+              userIds.indexOf(item?.userid?._id || item?.reciver?._id) > -1
+            );
+          });
+
+          this.setState({ roomChatData: filteredArray });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   submitHandler = async (e, astroid, userId) => {
     e.preventDefault();
-
     if (this.state.msg !== "") {
       let obj = {
         reciver: this.state.userId,
@@ -145,7 +256,7 @@ class ChatApp extends React.Component {
       await axiosConfig
         .post(`/user/add_chatroom/${this.state.astroId}`, obj)
         .then(async (response) => {
-          console.log("hdfkjh", response.data.status);
+          console.log("add chat room", response.data.status);
           if (response.data.status === true) {
             this.setState({ msg: "" });
             await axiosConfig
@@ -249,7 +360,7 @@ class ChatApp extends React.Component {
                             }
                           />
                         </div>
-                        <form class="messages-inputs" o>
+                        <form class="messages-inputs">
                           <input
                             type="text"
                             placeholder="Send a message"
@@ -257,16 +368,9 @@ class ChatApp extends React.Component {
                               this.handleChange(e);
                             }}
                             value={this.state.msg}
-                            defaultValue={""}
                           />
                           <button
-                            onClick={(e) =>
-                              this.submitHandler(
-                                e,
-                                this.state.astroId,
-                                this.state.userId
-                              )
-                            }
+                            onClick={(e) => swal("Select User to full screen")}
                           >
                             <i class="material-icons">send</i>
                           </button>
@@ -279,13 +383,27 @@ class ChatApp extends React.Component {
                 <>
                   <Col lg={this.state.ModdleToggle === true ? "12" : "8"}>
                     <Row>
-                      <FaArrowAltCircleRight
-                        style={{ cursor: "pointer" }}
-                        onClick={() => this.setState({ ModdleToggle: false })}
-                        fill="#ffcc01"
-                        size="40px"
-                        className="mx-2 mb-2 faarrowalt"
-                      />
+                      <Col>
+                        <FaArrowAltCircleRight
+                          style={{ cursor: "pointer" }}
+                          onClick={() => this.setState({ ModdleToggle: false })}
+                          fill="#ffcc01"
+                          size="40px"
+                          className="mx-2 mb-2 faarrowalt"
+                        />
+                      </Col>
+                      <Col>
+                        <div className="d-flex justify-content-end mt-1">
+                          {/* {this.state.tooglebtn === "false" ? "dddone" : null} */}
+                          <Button
+                            className="closebtnchat"
+                            onClick={(e) => this.handleCloseChat(e)}
+                            color="primary"
+                          >
+                            Close Chat
+                          </Button>
+                        </div>
+                      </Col>
                     </Row>
                     <div class="app rt-chat">
                       <div class="messages">
@@ -321,7 +439,7 @@ class ChatApp extends React.Component {
                             }
                           />
                         </div>
-                        <form class="messages-inputs" o>
+                        <form class="messages-inputs">
                           <input
                             type="text"
                             placeholder="Send a message"
@@ -333,12 +451,21 @@ class ChatApp extends React.Component {
                           />
                           <button
                             onClick={(e) =>
-                              this.submitHandler(
-                                e,
-                                this.state.astroId,
-                                this.state.userId
-                              )
+                              this.state.tooglebtn
+                                ? this.handleAddChat(e)
+                                : this.submitHandler(
+                                    e,
+                                    this.state.astroId,
+                                    this.state.userId
+                                  )
                             }
+                            // onClick={(e) =>
+                            //   this.submitHandler(
+                            //     e,
+                            //     this.state.astroId,
+                            //     this.state.userId
+                            //   )
+                            // }
                           >
                             <i class="material-icons">send</i>
                           </button>

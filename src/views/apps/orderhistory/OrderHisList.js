@@ -206,13 +206,15 @@ class OrderHisList extends React.Component {
     ],
   };
   async componentDidMount() {
+    const astroId = localStorage.getItem("astroId");
     await axiosConfig
       .get("/admin/admin_product_Orderslist")
       .then((response) => {
         console.log(response);
         let rowData = response.data.data;
-        console.log(rowData);
-        this.setState({ rowData });
+        let arr = rowData.filter((value) => value?.astroid?._id === astroId);
+
+        this.setState({ rowData: arr });
       });
   }
 

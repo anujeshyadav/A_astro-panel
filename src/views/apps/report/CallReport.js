@@ -19,7 +19,7 @@ import "../../../assets/scss/pages/users.scss";
 import { AgGridReact } from "ag-grid-react";
 import { Route } from "react-router-dom";
 import axios from "axios";
-//import classnames from "classnames";
+
 import axiosConfig from "../../../axiosConfig";
 import Breadcrumbs from "../../../components/@vuexy/breadCrumbs/BreadCrumb";
 
@@ -42,9 +42,6 @@ class CallReport extends React.Component {
         field: "node.rowIndex + 1",
         width: 100,
         filter: true,
-        // checkboxSelection: true,
-        // headerCheckboxSelectionFilteredOnly: true,
-        // headerCheckboxSelection: true,
       },
 
       {
@@ -113,14 +110,14 @@ class CallReport extends React.Component {
       },
 
       {
-        headerName: "Deducted Amount",
+        headerName: " Your Credit's ",
         field: "Deducted Amount",
         filter: true,
         width: 200,
         cellRendererFramework: (params) => {
           return (
             <div>
-              <span>{params.data?.userdeductedAmt}</span>
+              <span>{params.data?.userdeductedAmt} Rs</span>
             </div>
           );
         },
@@ -184,17 +181,17 @@ class CallReport extends React.Component {
     });
   }
 
-  async runthisfunction(id) {
-    console.log(id);
-    await axios.get(`http://3.108.185.7:4000/admin/delcustomer/${id}`).then(
-      (response) => {
-        console.log(response);
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
-  }
+  // async runthisfunction(id) {
+  //   console.log(id);
+  //   await axios.get(`http://3.108.185.7:4000/admin/delcustomer/${id}`).then(
+  //     (response) => {
+  //       console.log(response);
+  //     },
+  //     (error) => {
+  //       console.log(error);
+  //     }
+  //   );
+  // }
   onGridReady = (params) => {
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;

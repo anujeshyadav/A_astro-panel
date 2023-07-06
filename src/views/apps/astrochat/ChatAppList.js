@@ -14,14 +14,13 @@ class ChatAppList extends React.Component {
     };
   }
   componentDidMount() {
-    let newuser = sessionStorage.getItem("Chat_or_video_userid");
-    console.log(newuser);
-    this.setState({ connecting_usrid: newuser });
+    let currentuserid = localStorage.getItem("CurrentChat_userid");
+    this.setState({ connecting_usrid: currentuserid });
   }
 
   render() {
     const { userChatList } = this.props;
-    console.log("console.log", this.props.userChatList);
+
     return (
       <ul
         className="listofchat"
@@ -34,7 +33,12 @@ class ChatAppList extends React.Component {
                   className="newmainheaading mt-1 mb-1"
                   style={{
                     backgroundColor: `${
-                      this.state.Index === i ? "#ef9014" : "white"
+                      // this.state.Index === i
+                      //   ? "#ef9014"
+                      //   : "white" ||
+                      this.state.connecting_usrid === user?.userid?._id
+                        ? "#ef9014"
+                        : "white"
                     }`,
                     borderRadius: "8px",
                     height: "60px",

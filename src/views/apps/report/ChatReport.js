@@ -60,6 +60,19 @@ class ChatReport extends React.Component {
           );
         },
       },
+      {
+        headerName: "Call Type",
+        field: "Status",
+        filter: true,
+        width: 200,
+        cellRendererFramework: (params) => {
+          return (
+            <div>
+              <span>{params?.data?.type}</span>
+            </div>
+          );
+        },
+      },
 
       {
         headerName: "Duration",
@@ -69,15 +82,9 @@ class ChatReport extends React.Component {
         cellRendererFramework: (params) => {
           return (
             <div>
-              {params?.data?.userdeductedAmt === 0 ? (
-                <>
-                  <span>Not Answered</span>
-                </>
-              ) : (
-                <>
-                  <span>{params.data?.Duration} Second</span>
-                </>
-              )}
+              <>
+                <span>{params?.data?.duration} Second</span>
+              </>
             </div>
           );
         },
@@ -91,7 +98,7 @@ class ChatReport extends React.Component {
           return (
             <div>
               <>
-                <span>{params.data?.userid?.fullname}</span>
+                <span>{params.data?.userId?.fullname}</span>
               </>
             </div>
           );
@@ -106,7 +113,7 @@ class ChatReport extends React.Component {
         cellRendererFramework: (params) => {
           return (
             <div>
-              <span>{params.data?.createdAt.split("T")[0]}</span>
+              <span>{params.data?.createdAt?.split("T")[0]}</span>
             </div>
           );
         },
@@ -177,9 +184,10 @@ class ChatReport extends React.Component {
     let { id } = this.props.match.params;
     let astroid = localStorage.getItem("astroId");
     console.log(astroid);
-    axiosConfig.get(`/user/astroCallHistory/${astroid}`).then((response) => {
+    axiosConfig.get(`/user/astroChathistory/${astroid}`).then((response) => {
+      // axiosConfig.get(`/user/astroCallHistory/${astroid}`).then((response) => {
       let rowData = response.data.data;
-      console.log(rowData);
+      // console.log(rowData);
       this.setState({ rowData });
     });
   }
@@ -222,9 +230,9 @@ class ChatReport extends React.Component {
       // console.log(rowData),
       <div>
         <Breadcrumbs
-          breadCrumbTitle="Call Report"
+          breadCrumbTitle="Chat/VideoCall Report"
           breadCrumbParent="Home"
-          breadCrumbActive="Call Report"
+          breadCrumbActive="Chat/VideoCall Report"
         />
         <Row className="app-user-list">
           <Col sm="12"></Col>
@@ -233,7 +241,7 @@ class ChatReport extends React.Component {
               <Row className="m-2">
                 <Col>
                   <h1 sm="6" className="float-left">
-                    Call Reports
+                    Chat/VideoCall Reports
                   </h1>
                 </Col>
                 {/* <Col>

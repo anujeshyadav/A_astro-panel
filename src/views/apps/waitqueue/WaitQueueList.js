@@ -274,7 +274,7 @@ class WaitQueueList extends React.Component {
         let reversedata = response.data?.waitQueueList.reverse();
         console.log(reversedata);
         console.log(rowData);
-        // this.setState({ rowData });
+
         this.setState({ rowData: reversedata });
       });
   }

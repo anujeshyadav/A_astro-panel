@@ -12,7 +12,7 @@ class ChatAppMassage extends React.Component {
   }
 
   render() {
-    console.log("props value", this.props.roomChatData);
+    // console.log("props value", this.props.roomChatData);
     return (
       <>
         {this.props.roomChatData.length

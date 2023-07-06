@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Button, Card, Col, FormGroup, Input, Label, Row } from "reactstrap";
 import AgoraUIKit, { layout } from "agora-react-uikit";
 import { useParams } from "react-router-dom";
-// import "./../../../assets/scss/video.scss";
-
 import axiosConfig from "../../../axiosConfig";
 import { history } from "../../../history";
 import swal from "sweetalert";
@@ -16,9 +14,7 @@ function YourVideocall() {
   const [Addcall, setAddcall] = useState(false);
   const param = useParams();
 
-  useEffect(() => {
-    console.log(param.id);
-  }, []);
+  useEffect(() => {}, []);
   const rtcProps = {
     // Pass your App ID here.
     appId: "7d1f07c76f9d46be86bc46a791884023",
@@ -35,21 +31,27 @@ function YourVideocall() {
     // layout: isPinned ? layout.pin : layout.grid,
   };
   const callbacks = {
-    EndCall: () => {
-      window.location.reload();
+    ["user-left"]: (user) => {
+      if (user) {
+        swal("User Leave the Room");
+      }
+    },
+    EndCall: (e) => {
+      handleCloseChat(e);
       setVideoCall(false);
+      window.location.reload();
     },
   };
 
-  const handlestatus = (e) => {
+  const handlestatus = async (e) => {
     e.preventDefault();
-    const astroid = localStorage.getItem("astroId");
-
+    let userid = localStorage.getItem("CurrentChat_userid");
+    let astroid = localStorage.getItem("astroId");
     let payload = {
       astroAccount: astroid,
     };
     if (Status === "Active") {
-      axiosConfig
+      await axiosConfig
         .post(`/user/astroVideoCall`, payload)
         .then((res) => {
           console.log(res.data);
@@ -66,26 +68,47 @@ function YourVideocall() {
         });
     }
     if (Status === "Deactive") {
+      handleCloseChat(e);
       setAddcall(false);
+    }
 
-      // localStorage.removeItem("astrotokenforvideocall");
+    if ((userid !== "" && userid !== undefined && userid !== null) || userid) {
+      let load = {
+        userId: userid,
+        astroId: astroid,
+        type: "Video",
+      };
+
+      await axiosConfig
+        .post(`/user/deductChatBalance`, load)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err.response.data);
+        });
     }
   };
-  // useEffect(() => {
-  //   const astroid = localStorage.getItem("astroId");
-  //   // console.log(astroid);
 
-  //   axiosConfig
-
-  //     .get(`user/channelList/${astroid}`)
-  //     .then((res) => {
-  //       console.log(res.data?.data[0]?.channelName);
-  //       setchannelName(res.data?.data[0]?.channelName);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // }, []);
+  const handleCloseChat = (e) => {
+    e.preventDefault();
+    let astroid = localStorage.getItem("astroId");
+    let userid = localStorage.getItem("CurrentChat_userid");
+    let value = {
+      userId: userid,
+      astroId: astroid,
+    };
+    axiosConfig
+      .post(`/user/changeStatus`, value)
+      .then((res) => {
+        console.log(res);
+        localStorage.removeItem("CurrentChat_userid");
+        window.location.replace("/");
+      })
+      .catch((err) => {
+        console.log(err.response.data);
+      });
+  };
   return (
     <div className="videocallmain" style={{ height: "720px" }}>
       <Card>
@@ -98,7 +121,7 @@ function YourVideocall() {
             </div>
           </Col>
 
-          <Col>
+          <Col lg="6" md="6" sm="6">
             <div className="container mt-1 mb-1">
               <Row>
                 <Col className="mt-1">
@@ -121,6 +144,7 @@ function YourVideocall() {
                       onClick={(e) => {
                         setStatus(e.target.value);
                         setAddcall(false);
+                        handleCloseChat(e);
                       }}
                       name="radio1"
                       type="radio"
@@ -130,6 +154,19 @@ function YourVideocall() {
                 </Col>
               </Row>
             </div>
+          </Col>
+          <Col>
+            <Col>
+              <div className="d-flex justify-content-end mt-1">
+                <Button
+                  className="closebtnchat"
+                  onClick={(e) => handleCloseChat(e)}
+                  color="primary"
+                >
+                  Close VideoCall
+                </Button>
+              </div>
+            </Col>
           </Col>
         </Row>
         <Row>
@@ -143,11 +180,11 @@ function YourVideocall() {
             <>
               {Addcall === true ? (
                 <>
-                  <div className="mx-2 mb-2">
-                    <Button onClick={() => setVideoCall(true)} color="success">
+                  {/* <div className="mx-2 mb-2"> */}
+                  {/* <Button onClick={() => setVideoCall(true)} color="success">
                       Click to join Now
-                    </Button>
-                  </div>
+                    </Button> */}
+                  {/* </div> */}
                 </>
               ) : null}
             </>
