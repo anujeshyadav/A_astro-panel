@@ -29,7 +29,7 @@ const handleNavigation = (e, path) => {
 const NavbarUser = () => {
   const [profilepic, setProfilepic] = useState([]);
   const [astronotification, setAstronotification] = useState([]);
-  const [videonotification, setVideonotification] = useState([]);
+  const [newStatus, setNewStatus] = useState("");
   const [viewnotify, setViewnotify] = useState("");
   const [countnotify, setCountnotify] = useState("");
   const [ButtonText, setButtonText] = useState("Offline");
@@ -117,11 +117,29 @@ const NavbarUser = () => {
       })
       .then((res) => {
         console.log(res.data);
+        swal("Status changed Successfully");
+
         if (res.data.message === "success") {
           if (ButtonText === "Offline") {
             setButtonText("Online");
           } else setButtonText("offline");
         }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const handleshowChangeMode = (e) => {
+    e.preventDefault();
+
+    let astroid = localStorage.getItem("astroId");
+    axiosConfig
+      .post(`/user/status_change/${astroid}`, {
+        callingStatus: newStatus,
+      })
+      .then((res) => {
+        console.log("res", res.data.data);
+        swal("Status changed Successfully");
       })
       .catch((err) => {
         console.log(err);
@@ -166,6 +184,24 @@ const NavbarUser = () => {
     <div className="">
       <ul className="nav navbar-nav navbar-nav-user float-right">
         <li>
+          <select
+            className="mt-1"
+            onChange={(e) => setNewStatus(e.target.value)}
+            id="availability"
+          >
+            <option value="Available">Available</option>
+            <option value="Busy">Busy</option>
+            <option value="Wait">Wait</option>
+          </select>
+          <Button
+            onClick={handleshowChangeMode}
+            size="sm"
+            className="ml-1  btn btn-success "
+          >
+            Mark {newStatus && newStatus}
+          </Button>
+        </li>
+        <li>
           <Button
             onClick={handleshowofflineAstro}
             size="sm"
@@ -174,6 +210,7 @@ const NavbarUser = () => {
             Mark {ButtonText && ButtonText}
           </Button>
         </li>
+
         <UncontrolledDropdown
           className="dropdown-notification nav-item"
           tag="li"
@@ -240,44 +277,6 @@ const NavbarUser = () => {
                           onClick={() => handledelStatus(data)}
                           className="denger media-heading gt-2"
                         >
-                          Reject
-                        </Button>
-                      </div>
-                    </Media>
-                    <small>
-                      <time
-                        className="media-meta"
-                        dateTime="2015-06-11T18:29:20+08:00"
-                      >
-                        {moment(data.createdAt).format("ll")}
-                      </time>
-                    </small>
-                  </Media>
-                ))}
-              </div>
-              <div className="">
-                {videonotification.map((data, i) => (
-                  <Media className="dddddfd">
-                    <Media left href="#">
-                      <Bell size={21} />
-                    </Media>
-                    <Media body>
-                      <Media heading className="success media-heading" tag="h6">
-                        <smaill className="notification-text ml-1">
-                          ({data?.videoLink})
-                        </smaill>
-                      </Media>
-                      <small className="notification-text">
-                        <p className="mb-0">
-                          Request for:
-                          <span>video</span>
-                        </p>
-                      </small>
-                      <div className="bottom-tag">
-                        <Button className="success media-heading gt-1">
-                          Accept
-                        </Button>
-                        <Button className="denger media-heading gt-2">
                           Reject
                         </Button>
                       </div>

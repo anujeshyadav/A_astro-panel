@@ -167,32 +167,32 @@ class FaqUserList extends React.Component {
         },
       },
 
-      {
-        headerName: "Email",
-        field: "email	",
-        filter: true,
-        width: 200,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <span>{params.data?.userid?.email}</span>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "Mobile No.",
-        field: "mobile	",
-        filter: true,
-        width: 200,
-        cellRendererFramework: (params) => {
-          return (
-            <div className="d-flex align-items-center cursor-pointer">
-              <span>{params.data?.userid?.mobile}</span>
-            </div>
-          );
-        },
-      },
+      // {
+      //   headerName: "Email",
+      //   field: "email	",
+      //   filter: true,
+      //   width: 200,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <span>{params.data?.userid?.email}</span>
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   headerName: "Mobile No.",
+      //   field: "mobile	",
+      //   filter: true,
+      //   width: 200,
+      //   cellRendererFramework: (params) => {
+      //     return (
+      //       <div className="d-flex align-items-center cursor-pointer">
+      //         <span>{params.data?.userid?.mobile}</span>
+      //       </div>
+      //     );
+      //   },
+      // },
 
       // {
       //   headerName: "Status",
@@ -211,7 +211,7 @@ class FaqUserList extends React.Component {
         headerName: "Created on",
         field: "dateofregister",
         filter: true,
-        width: 200,
+        width: 240,
         cellRendererFramework: (params) => {
           return (
             <div>
