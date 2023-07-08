@@ -170,6 +170,9 @@ const ViewAskQuestion = lazy(() =>
 const WaitQueueList = lazy(() =>
   import("./views/apps/waitqueue/WaitQueueList")
 );
+const WaitQueueListcall = lazy(() =>
+  import("./views/apps/waitqueue/waitQueuechat_video")
+);
 const UserQuestionReply = lazy(() =>
   import("./views/apps/askquestion/UserQuestionReply")
 );
@@ -565,6 +568,10 @@ class AppRouter extends React.Component {
             <AppRoute
               path="/app/waitqueue/waitQueueList"
               component={WaitQueueList}
+            />
+            <AppRoute
+              path="/app/waitqueue/waitQueueListcall"
+              component={WaitQueueListcall}
             />
             {/* <AppRoute
               path="/app/astrology/editAstrologer"

@@ -216,33 +216,23 @@ class WaitQueueList extends React.Component {
     ],
   };
 
-  handledeltewait = (userdata) => {
-    let astroId = localStorage.getItem("astroId");
-    axiosConfig
-      .get(`/user/deleteWaitQueueItem/${astroId}/${userdata?.data?.user?._id}`)
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((err) => {
-        console.log(err.response.data);
-      });
+  handleChat = (data) => {
+    console.log(data);
   };
 
   handleConnect = (type, userdata) => {
-    let astroId = localStorage.getItem("astroId");
-    if (type === "Chat") {
-      this.handledeltewait(userdata);
-      this.props.history.push("/app/astrochat/chatastro");
-    }
-    if (type === "VoiceCall") {
-      this.setState({ setText: "Calling" });
-      this.handleJoinCall(userdata.data);
-      this.handledeltewait(userdata);
-    }
-    if (type === "Video") {
-      this.handledeltewait(userdata);
-      this.props.history.push(`/astrovideocall/${astroId}`);
-    }
+    console.log(userdata.data);
+    // if (type === "Chat") {
+    //   this.props.history.push("/app/astrochat/chatastro");
+    // }
+    // if (type === "VoiceCall") {
+    //   this.setState({ setText: "Calling" });
+    //   this.handleJoinCall(userdata.data);
+    // }
+    // if (type === "Video") {
+    //   let astrodata = JSON.parse(localStorage.getItem("astroData"));
+    //   this.props.history.push(`/astrovideocall/${astrodata?._id}`);
+    // }
   };
   handleJoinCall = (data) => {
     console.log(data);
@@ -268,6 +258,14 @@ class WaitQueueList extends React.Component {
       });
   };
 
+  handleJoin = (data) => {
+    console.log(data?.data);
+    if (data?.data?.type === "Voice Call") {
+      this.handleJoinCall(data);
+    } else if (data?.data?.type === "Chat") {
+      this.handleChat(data);
+    }
+  };
   async componentDidMount() {
     const astroId = localStorage.getItem("astroId");
     // this is only for call
@@ -322,7 +320,7 @@ class WaitQueueList extends React.Component {
               <Row className="m-2">
                 <Col>
                   <h1 sm="6" className="float-left">
-                    Wait Queue List
+                    Wait Queue List for Video and Chat
                   </h1>
                 </Col>
                 <Col></Col>

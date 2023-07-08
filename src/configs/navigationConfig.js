@@ -179,12 +179,20 @@ const navigationConfig = [
   // },
   {
     id: "waitqueue",
-    title: "Wait Queue List",
+    title: "WaitQueue for Voicecall",
     type: "item",
     icon: <Icon.List color="red" size={20} />,
     permissions: ["admin", "editor"],
     navLink: "/app/waitqueue/WaitQueueList",
   },
+  // {
+  //   id: "waitqueuechat",
+  //   title: "WaitQueue Chat/Video",
+  //   type: "item",
+  //   icon: <Icon.List color="red" size={20} />,
+  //   permissions: ["admin", "editor"],
+  //   navLink: "/app/waitqueue/waitQueueListcall",
+  // },
 
   {
     id: "orderhistory",

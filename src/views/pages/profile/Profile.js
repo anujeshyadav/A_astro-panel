@@ -9,11 +9,11 @@ import {
   Card,
   CardTitle,
 } from "reactstrap";
-// import axios from "axios";
 import swal from "sweetalert";
 import { Check } from "react-feather";
-// import { Route } from "react-router-dom";
-import axios from "axios";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
+import axiosConfig from "../../../axiosConfig";
 import "../../../assets/scss/pages/users-profile.scss";
 import Breadcrumbs from "../../../components/@vuexy/breadCrumbs/BreadCrumb";
 import CheckBoxesVuexy from "../../../components/@vuexy/checkbox/CheckboxesVuexy";
@@ -25,14 +25,23 @@ class Profile extends React.Component {
       fullname: "",
       email: "",
       mobile: "",
-      // resetpassword: "",
-      // password: "",
       img: "",
       selectedName: "",
       selectedFile: null,
       approvedstatus: "",
-
       data: {},
+      callCharge: "",
+      all_skills: "",
+      callingStatus: "",
+      dob: "",
+      exp_in_years: "",
+      gender: "",
+      highest_qualification: "",
+      language: "",
+      max_earning_expe: "",
+      min_earning_expe: "",
+      max_tym: "",
+      min_tym: "",
     };
   }
 
@@ -43,73 +52,85 @@ class Profile extends React.Component {
     console.log(event.target.files[0]);
   };
 
-  componentDidMount() {
-    let astroId = localStorage.getItem("astroId");
-    console.log(astroId);
-    axios
-      .get(`http://65.2.175.154:8000/admin/getoneAstro/${astroId}`)
+  getData = () => {
+    const astroId = localStorage.getItem("astroId");
+    axiosConfig
+      .get(`/admin/getoneAstro/${astroId}`)
       .then((response) => {
         console.log(response.data.data);
-        console.log(response);
         this.setState({
           data: response.data.data,
           fullname: response.data.data.fullname,
           email: response.data.data.email,
           mobile: response.data.data.mobile,
           img: response.data.data.img,
-          password: response.data.data.password,
+          callCharge: response.data.data.callCharge,
+          all_skills: response.data.data.all_skills,
+          callingStatus: response.data.data.callingStatus,
+          dob: response.data.data.dob,
+          exp_in_years: response.data.data.exp_in_years,
+          gender: response.data.data.gender,
+          highest_qualification: response.data.data.highest_qualification,
+          language: response.data.data.language,
+          max_earning_expe: response.data.data.max_earning_expe,
+          min_earning_expe: response.data.data.min_earning_expe,
+          max_tym: response.data.data.max_tym,
+          min_tym: response.data.data.min_tym,
+          availableAmt: response.data.data.availableAmt,
         });
       })
       .catch((error) => {
-        console.log(error.response);
+        // swal("Error!", "You clicked the button!", "error");
+        console.log(error);
       });
+  };
+  componentDidMount() {
+    this.getData();
   }
-
   changeHandler = (e) => {
     this.setState({ [e.target.name]: e.target.value });
   };
 
   submitHandler = (e) => {
     e.preventDefault();
-    console.log(this.state);
     const data = new FormData();
     data.append("fullname", this.state.fullname);
     data.append("email", this.state.email);
     data.append("mobile", this.state.mobile);
-    // data.append("password", this.state.password);
-    // data.append("resetpassword", this.state.resetpassword);
+    data.append("callCharge", this.state.callCharge);
+    data.append("all_skills", this.state.all_skills);
+    data.append("exp_in_years", this.state.exp_in_years);
+    data.append("highest_qualification", this.state.highest_qualification);
+    data.append("language", this.state.language);
+    data.append("max_tym", this.state.max_tym);
+    data.append("min_tym", this.state.min_tym);
     if (this.state.selectedFile !== null) {
-      data.append("img", this.state.selectedFile, this.state.selectedName);
-    }
-
-    for (var value of data.values()) {
-      console.log(value);
-    }
-
-    for (var key of data.keys()) {
-      console.log(key);
+      data.append("img", this.state.selectedFile);
     }
 
     let astroId = localStorage.getItem("astroId");
-    axios
-      .post(`http://65.2.175.154:8000/user/editAstroDetails/${astroId}`, data)
+    axiosConfig
+      .post(`/user/editAstroDetails/${astroId}`, data)
       .then((response) => {
-        console.log(response.data.data);
-        console.log(response);
         this.setState({
           data: response.data.data,
           fullname: response.data.data.fullname,
           email: response.data.data.email,
           mobile: response.data.data.mobile,
-          img: response.data.data.img,
-          password: response.data.data.password,
+          callCharge: response.data.data.callCharge,
+          all_skills: response.data.data.all_skills,
+          exp_in_years: response.data.data.exp_in_years,
+          highest_qualification: response.data.data.highest_qualification,
+          language: response.data.data.language,
+          max_tym: response.data.data.max_tym,
+          min_tym: response.data.data.min_tym,
         });
+        this.getData();
         swal("Success!", "Edited SuccessFull!", "success");
       })
 
       .catch((error) => {
         swal("Error!", "You clicked the button!", "error");
-        console.log(error.response);
       });
   };
   render() {
@@ -132,16 +153,140 @@ class Profile extends React.Component {
                   />
                   <ul className="lst-1">
                     <li className="lst-2">
-                      Name:{" "}
+                      Name:
                       <span className="lst-3">{this.state.data.fullname}</span>
                     </li>
                     <li className="lst-2">
-                      Mobile:{" "}
+                      Mobile:
                       <span className="lst-3">{this.state.data.mobile}</span>
                     </li>
                     <li className="lst-2">
-                      Email:{" "}
+                      Email:
                       <span className="lst-3">{this.state.data.email}</span>
+                    </li>
+                    <li className="lst-2">
+                      CallRate:
+                      <span className="lst-3">
+                        Rs {this.state.data.callCharge}
+                      </span>
+                    </li>
+                    <li className="lst-2">
+                      All Skills:
+                      <span className="lst-3">
+                        {this.state.data.all_skills}
+                      </span>
+                    </li>
+                    <li className="lst-2">
+                      Calling Status:
+                      <span className="lst-3">
+                        {this.state.data.callingStatus}
+                      </span>
+                    </li>
+                    <li className="lst-2">
+                      DOB:
+                      <span className="lst-3">{this.state.data.dob}</span>
+                    </li>
+                    <li className="lst-2">
+                      Experience:
+                      <span className="lst-3">
+                        {this.state.data.exp_in_years}Year
+                      </span>
+                    </li>
+                    <li className="lst-2">
+                      Gender:
+                      <span className="lst-3">{this.state.data.gender}</span>
+                    </li>
+                    <li className="lst-2">
+                      Higher Qualification:
+                      <span className="lst-3">
+                        {this.state.data.highest_qualification}
+                      </span>
+                    </li>
+                    <li className="lst-2">
+                      School/College:
+                      <span className="lst-3">
+                        {this.state.data.clg_scl_name}
+                      </span>
+                    </li>
+                    <li className="lst-2">
+                      Degree Diploma:
+                      <span className="lst-3">
+                        {this.state.data.degree_deploma}
+                      </span>
+                    </li>
+                    <li className="lst-2">
+                      City:
+                      <span className="lst-3">{this.state.data.crnt_city}</span>
+                    </li>
+                    <li className="lst-2">
+                      Language:
+                      <span className="lst-3">{this.state.data.language}</span>
+                    </li>
+                    <li className="lst-2">
+                      Maximum Earning:
+                      <span className="lst-3">
+                        Rs{this.state.data.max_earning_expe}
+                      </span>
+                    </li>
+                    <li className="lst-2">
+                      Minimum Earning:
+                      <span className="lst-3">
+                        Rs{this.state.data.min_earning_expe}
+                      </span>
+                    </li>
+                    <li className="lst-2">
+                      Maximum Time:
+                      <span className="lst-3">{this.state.data.max_tym}</span>
+                    </li>
+                    <li className="lst-2">
+                      Minimum Time:
+                      <span className="lst-3">{this.state.data.min_tym}</span>
+                    </li>
+                    <li className="lst-2">
+                      Available Amount:
+                      <span className="lst-3">
+                        {this.state.data.availableAmt}
+                      </span>
+                    </li>
+                    <li className="lst-2">
+                      Approved Status:
+                      <span className="lst-3">
+                        {this.state.data.approvedstatus}
+                      </span>
+                    </li>
+                    <li className="lst-2">
+                      Avarage Rating:
+                      <span className="lst-3">
+                        {this.state.data.avg_rating}
+                      </span>
+                    </li>
+                    <li className="lst-2">
+                      Facebook Link:
+                      <span className="lst-3">{this.state.data.fb_link}</span>
+                    </li>
+                    <li className="lst-2">
+                      Instagram Link:
+                      <span className="lst-3">
+                        {this.state.data.insta_link}
+                      </span>
+                    </li>
+                    <li className="lst-2">
+                      LinkedIn Link:
+                      <span className="lst-3">
+                        {this.state.data.linkedln_link}
+                      </span>
+                    </li>
+                    <li className="lst-2">
+                      Youtube Link:
+                      <span className="lst-3">
+                        {this.state.data.youtube_link}
+                      </span>
+                    </li>
+                    <li className="lst-2">
+                      Other Online PlateForm:
+                      <span className="lst-3">
+                        {this.state.data.other_online_platform}
+                      </span>
                     </li>
                   </ul>
                 </div>
@@ -163,63 +308,128 @@ class Profile extends React.Component {
                     </CardTitle>
                     <Row className="m-0">
                       <Col sm="12" className="p-0">
-                        <Form action="/">
-                          <Label>Name</Label>
-                          <Input
-                            type="text"
-                            name="fullname"
-                            placeholder="Name"
-                            value={this.state.fullname}
-                            onChange={this.changeHandler}
+                        <Label>Name</Label>
+                        <Input
+                          type="text"
+                          name="fullname"
+                          placeholder="Name"
+                          value={this.state.fullname}
+                          onChange={this.changeHandler}
+                        />
+                        <br></br>
+                        <Label>Email</Label>
+                        <Input
+                          type="email"
+                          name="email"
+                          placeholder="email"
+                          disabled
+                          value={this.state.email}
+                          onChange={this.changeHandler}
+                        />
+                        <br></br>
+                        <Label>Mobile No.</Label>
+
+                        <div className="form-group mtb-10">
+                          <PhoneInput
+                            countryCodeEditable={false}
+                            className="mob-int"
+                            disabled
+                            country={"in"}
+                            value={(this.state?.mobile).toString()}
+                            onChange={(mobile) => {
+                              this.setState({ mobile: mobile });
+                            }}
                           />
-                          <br></br>
-                          <Label>Email</Label>
-                          <Input
-                            type="email"
-                            name="email"
-                            placeholder="email"
-                            value={this.state.email}
-                            onChange={this.changeHandler}
-                          />
-                          <br></br>
-                          <Label>Mobile No.</Label>
-                          <Input
-                            type="number"
-                            name="mobile"
-                            placeholder="Mobile No."
-                            value={this.state.mobile}
-                            onChange={this.changeHandler}
-                          />
-                          <br></br>
-                          {/* <Label>Password</Label>
-                          <Input
-                            type="password"
-                            name="password"
-                            placeholder="Reset password"
-                            value={this.state.password}
-                            onChange={this.changeHandler}
-                          /> */}
-                          <Label>User Image</Label>
-                          <Input
-                            className="form-control"
-                            type="file"
-                            name="img"
-                            onChange={this.onChangeHandler}
-                          />
-                          <br></br>
-                          <CheckBoxesVuexy
-                            color="primary"
-                            icon={<Check className="vx-icon" size={16} />}
-                            label=" I accept the terms & conditions."
-                            defaultChecked={true}
-                          />
-                          <br></br>
-                          <div className="d-flex justify-content-between">
-                            <Button.Ripple color="primary" type="submit">
-                              Submit
-                            </Button.Ripple>
-                          </div>
-                        </Form>
+                          {this.state.mobileError !== "" ? (
+                            <span style={{ color: "red" }}>
+                              {this.state.mobileError}
+                            </span>
+                          ) : null}
+                        </div>
+
+                        <Label>Call Rate</Label>
+                        <Input
+                          type="number"
+                          name="callCharge"
+                          placeholder="Call Charge"
+                          value={this.state.callCharge}
+                          onChange={this.changeHandler}
+                        />
+                        <br></br>
+                        <Label>All Skills</Label>
+                        <Input
+                          type="text"
+                          name="all_skills"
+                          placeholder="All Skills"
+                          value={this.state.all_skills}
+                          onChange={this.changeHandler}
+                        />
+                        <br></br>
+                        <Label>Experience In Year</Label>
+                        <Input
+                          type="number"
+                          name="exp_in_years"
+                          placeholder="Experience"
+                          value={this.state.exp_in_years}
+                          onChange={this.changeHandler}
+                        />
+                        <br></br>
+                        <Label>Highest Qualification</Label>
+                        <Input
+                          type="text"
+                          name="highest_qualification"
+                          placeholder="Highest Qualification"
+                          value={this.state.highest_qualification}
+                          onChange={this.changeHandler}
+                        />
+                        <br></br>
+                        <Label>Maximum Time</Label>
+                        <Input
+                          type="number"
+                          name="max_tym"
+                          placeholder="Maximum Time"
+                          value={this.state.max_tym}
+                          onChange={this.changeHandler}
+                        />
+                        <br></br>
+                        <Label>Language</Label>
+                        <Input
+                          type="text"
+                          name="language"
+                          placeholder="Language"
+                          value={this.state.language}
+                          onChange={this.changeHandler}
+                        />
+                        <br></br>
+                        <Label>Minimum Time</Label>
+                        <Input
+                          type="number"
+                          name="min_tym"
+                          placeholder="Minimum  Time"
+                          value={this.state.min_tym}
+                          onChange={this.changeHandler}
+                        />
+                        <br></br>
+                        <Label>User Image</Label>
+                        <Input
+                          className="form-control"
+                          type="file"
+                          name="img"
+                          onChange={this.onChangeHandler}
+                        />
+                        <br></br>
+                        <CheckBoxesVuexy
+                          color="primary"
+                          icon={<Check className="vx-icon" size={16} />}
+                          label=" I accept the terms & conditions."
+                          defaultChecked={true}
+                        />
+                        <br></br>
+                        <div className="d-flex justify-content-between">
+                          <Button.Ripple color="primary" type="submit">
+                            Submit
+                          </Button.Ripple>
+                        </div>
                       </Col>
                     </Row>
                   </div>
