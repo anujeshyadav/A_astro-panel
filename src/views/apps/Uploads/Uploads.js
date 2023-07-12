@@ -116,17 +116,18 @@ const Uploads = () => {
                     <Row className="uploadmain">
                       <Col>
                         <div>
-                          <Label>
-                            <p style={{ color: "red" }}>
-                              png,jpg,jpeg,mp4-only{" "}
-                            </p>
-                          </Label>
                           <Input
                             name="file"
                             onChange={(e) => setvideo(e.target.files[0])}
                             accept="video/mp4,.png,.jpg,.jpeg"
                             type="file"
                           />
+                          <Label>
+                            <p style={{ color: "red" }}>
+                              Max 3 Video .mp4 only and limit is 25MB per Video
+                              {"*"} and png,jpg,jpeg-only{" "}
+                            </p>
+                          </Label>
                         </div>
                       </Col>
                       <Col>
@@ -134,7 +135,7 @@ const Uploads = () => {
                           <Button
                             onClick={handlevideoUpload}
                             size="sm"
-                            className="bntuploadsvideo mt-3"
+                            className="bntuploadsvideo"
                             color="primary"
                           >
                             Upload

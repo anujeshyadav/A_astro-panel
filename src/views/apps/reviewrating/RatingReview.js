@@ -89,6 +89,19 @@ class RatingReview extends React.Component {
         },
       },
       {
+        headerName: "Date",
+        field: "comment	",
+        filter: true,
+        width: 200,
+        cellRendererFramework: (params) => {
+          return (
+            <div className="d-flex align-items-center cursor-pointer">
+              <span>{params.data?.createdAt.split("T")[0]}</span>
+            </div>
+          );
+        },
+      },
+      {
         headerName: "Type",
         field: "type",
         filter: true,

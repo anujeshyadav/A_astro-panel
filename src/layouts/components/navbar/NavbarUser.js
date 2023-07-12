@@ -61,7 +61,7 @@ const NavbarUser = () => {
     await axiosConfig
       .get(`/user/wait_queue_list/${astroId}`)
       .then((res) => {
-        console.log(res.data.data);
+        // console.log(res.data.data);
         let newdata = res.data.data;
         let newarr = newdata.filter(
           (value) => value?.type === "Video" || value?.type === "Chat"
@@ -80,7 +80,7 @@ const NavbarUser = () => {
     await axiosConfig
       .get(`/user/wait_queue_list/${astroId}`)
       .then((res) => {
-        console.log(res);
+        // console.log(res.data.data);
         setAstronotification(res.data.data);
         setViewnotify(res.data.count);
       })
@@ -148,17 +148,28 @@ const NavbarUser = () => {
 
   const handleStatus = (data) => {
     console.log(data);
+    localStorage.setItem("notification_Accepted_id", data?._id);
     localStorage.setItem("CurrentChat_userid", data?.userid?._id);
-    console.log(data?.userid?._id);
-    let type = data?.type;
+    let accept = {
+      status: "Accept",
+    };
     axiosConfig
-      .get(`/admin/dltNotificattion/${data?._id}`)
+      .post(`/user/acceptNotificationByAstro/${data?._id}`, accept)
       .then((res) => {
-        console.log(res);
+        console.log(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
+    let type = data?.type;
+    // axiosConfig
+    //   .get(`/admin/dltNotificattion/${data?._id}`)
+    //   .then((res) => {
+    //     console.log(res);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
     if (type === "Chat") {
       history.push("/app/astrochat/chatastro");
     }
