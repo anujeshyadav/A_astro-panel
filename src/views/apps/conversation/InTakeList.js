@@ -130,6 +130,21 @@ class InTakeList extends React.Component {
         },
       },
       {
+        headerName: "Type",
+        field: "Type",
+        filter: true,
+        width: 120,
+        cellRendererFramework: (params) => {
+          return (
+            <div>
+              <Button size="sm" color="primary">
+                <span>{params.data?.type}</span>
+              </Button>
+            </div>
+          );
+        },
+      },
+      {
         headerName: "DOB",
         field: "dob",
         filter: true,
@@ -151,19 +166,6 @@ class InTakeList extends React.Component {
           return (
             <div>
               <span>{params.data.date_of_time}</span>
-            </div>
-          );
-        },
-      },
-      {
-        headerName: "Birth Place",
-        field: "birthPlace",
-        filter: true,
-        width: 120,
-        cellRendererFramework: (params) => {
-          return (
-            <div>
-              <span>{params.data.birthPlace}</span>
             </div>
           );
         },
@@ -292,7 +294,7 @@ class InTakeList extends React.Component {
       .then((response) => {
         let rowData = response.data.data;
         console.log(rowData);
-        this.setState({ rowData: rowData.reverse() });
+        this.setState({ rowData: rowData });
       });
   }
 

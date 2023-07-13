@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Button, Card, Col, FormGroup, Input, Label, Row } from "reactstrap";
+import {
+  Alert,
+  Button,
+  Card,
+  Col,
+  FormGroup,
+  Input,
+  Label,
+  Row,
+} from "reactstrap";
 import AgoraUIKit, { layout } from "agora-react-uikit";
 import { useParams } from "react-router-dom";
 import axiosConfig from "../../../axiosConfig";
@@ -33,7 +42,7 @@ function YourVideocall() {
   const callbacks = {
     ["user-left"]: (user) => {
       if (user) {
-        swal("User Leave the Room");
+        swal("User Leave The Room");
       }
     },
     EndCall: (e) => {

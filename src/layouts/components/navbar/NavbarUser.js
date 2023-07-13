@@ -61,7 +61,7 @@ const NavbarUser = () => {
     await axiosConfig
       .get(`/user/wait_queue_list/${astroId}`)
       .then((res) => {
-        // console.log(res.data.data);
+        console.log(res.data.data);
         let newdata = res.data.data;
         let newarr = newdata.filter(
           (value) => value?.type === "Video" || value?.type === "Chat"
@@ -254,7 +254,7 @@ const NavbarUser = () => {
             >
               <div className="">
                 {astronotification.map((data, i) => (
-                  <Media className="dddddfd">
+                  <Media key={i} className="dddddfd">
                     <Media left href="#">
                       <Bell size={21} />
                     </Media>
@@ -269,7 +269,6 @@ const NavbarUser = () => {
                             height="22px"
                           />
                           <span>{data?.userid?.fullname}</span>
-                          {/* <h6> {data.userid?.mobile}</h6> */}
                         </smaill>
                       </Media>
                       <small className="notification-text">
@@ -312,6 +311,7 @@ const NavbarUser = () => {
           </DropdownMenu>
         </UncontrolledDropdown>
 
+        {/* astrologet api call */}
         <UncontrolledDropdown tag="li" className="dropdown-user nav-item">
           <DropdownToggle tag="a" className="nav-link dropdown-user-link">
             <div className="user-nav d-sm-flex d-none">
