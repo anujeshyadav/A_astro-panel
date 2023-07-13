@@ -469,6 +469,7 @@ class AppRouter extends React.Component {
     if (data === undefined || data === null) {
       history.push("/#/pages/login");
       window.location.replace("/#/pages/login");
+      window.location.reload();
     }
   }
   render() {

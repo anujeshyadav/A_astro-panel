@@ -176,7 +176,7 @@ const NavbarUser = () => {
     if (type === "Video") {
       let astrodata = JSON.parse(localStorage.getItem("astroData"));
       window.open(`#/astrovideocall/${astrodata?._id}`, "_blank");
-      // history.push(`/astrovideocall/${astrodata?._id}`, "_blank");
+      // history.push(`//${astrodata?._id}`, "_blank");
     }
   };
   const handledelStatus = (data) => {
