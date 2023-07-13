@@ -200,6 +200,7 @@ const NavbarUser = () => {
             onChange={(e) => setNewStatus(e.target.value)}
             id="availability"
           >
+            <option value="Available">--Select--</option>
             <option value="Available">Available</option>
             <option value="Busy">Busy</option>
             <option value="Wait">Wait</option>
