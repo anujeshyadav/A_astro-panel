@@ -94,7 +94,7 @@ function YourVideocall() {
           console.log(res);
         })
         .catch((err) => {
-          console.log(err.response.data);
+          console.log(err.response);
         });
     }
   };
@@ -119,8 +119,8 @@ function YourVideocall() {
       });
   };
   return (
-    <div className="videocallmain" style={{ height: "720px" }}>
-      <Card>
+    <div className="videocallmain mt-2">
+      <Card className="mt-2">
         <Row>
           <Col lg="4" md="4" sm="4">
             <div className="container mt-2 mb-1">

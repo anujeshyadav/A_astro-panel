@@ -198,12 +198,12 @@ const NavbarUser = () => {
           <select
             className="mt-1"
             onChange={(e) => setNewStatus(e.target.value)}
-            id="availability"
+            id=""
           >
             <option value="Available">--Select--</option>
+            <option value="Wait">Wait</option>
             <option value="Available">Available</option>
             <option value="Busy">Busy</option>
-            <option value="Wait">Wait</option>
           </select>
           <Button
             onClick={handleshowChangeMode}

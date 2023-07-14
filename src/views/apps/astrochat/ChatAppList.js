@@ -30,6 +30,7 @@ class ChatAppList extends React.Component {
           ? userChatList.map((user, i) => {
               return (
                 <li
+                  key={i}
                   className="newmainheaading mt-1 mb-1"
                   style={{
                     backgroundColor: `${
@@ -60,7 +61,7 @@ class ChatAppList extends React.Component {
                   </div>
                   <div className="lst-con mt-1">
                     <h5>{user.userid?.fullname}</h5>
-                    <p>{user.msg}</p>
+                    <p>{user.msg.slice(0, 25)}</p>
                   </div>
                 </li>
               );
