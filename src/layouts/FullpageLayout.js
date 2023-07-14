@@ -16,7 +16,7 @@ const FullPageLayout = ({ children, ...rest }) => {
         <div className="content-wrapper">
           <div className="content-body">
             <div className="flexbox-container">
-              <main className="main w-100 h-100">{children}</main>
+              <main className="main w-100 ">{children}</main>
             </div>
           </div>
         </div>
