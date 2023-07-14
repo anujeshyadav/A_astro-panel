@@ -468,8 +468,9 @@ class AppRouter extends React.Component {
     sessionStorage.clear();
     if (data === undefined || data === null) {
       history.push("/#/pages/login");
+      // localStorage.clear();
       window.location.replace("/#/pages/login");
-      window.location.reload();
+      // window.location.reload();
     }
   }
   render() {
