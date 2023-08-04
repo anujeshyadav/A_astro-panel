@@ -179,7 +179,7 @@ class ChatApp extends React.Component {
   getChatdata = () => {
     setInterval(() => {
       this.getChatRoomIdnew(this.state.userData, this.state.indexValue);
-    }, 5000);
+    }, 3000);
   };
 
   getChatRoomIdnew = (user, i) => {

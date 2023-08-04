@@ -77,16 +77,18 @@ const NavbarUser = () => {
   };
   const newgetAllnotification = async () => {
     const astroId = localStorage.getItem("astroId");
-    await axiosConfig
-      .get(`/user/wait_queue_list/${astroId}`)
-      .then((res) => {
-        // console.log(res.data.data);
-        setAstronotification(res.data.data);
-        setViewnotify(res.data.count);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (astroId) {
+      await axiosConfig
+        .get(`/user/wait_queue_list/${astroId}`)
+        .then((res) => {
+          // console.log(res.data.data);
+          setAstronotification(res.data.data);
+          setViewnotify(res.data.count);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   const handlenotification = () => {
