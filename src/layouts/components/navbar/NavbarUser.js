@@ -39,7 +39,7 @@ const NavbarUser = () => {
     e.preventDefault();
     let astroid = localStorage.getItem("astroId");
     let astroData = JSON.parse(localStorage.getItem("astroData"));
-    debugger;
+    // debugger;
     if (!astroData) {
       window.location.replace("/#/pages/login");
     }
