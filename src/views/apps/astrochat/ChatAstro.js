@@ -21,6 +21,7 @@ class ChatApp extends React.Component {
       userData: null,
       msg: "",
       roomId: "",
+      UserDetails: {},
       roomChatData: [],
       time: {},
       seconds: 60 * 15,
@@ -35,12 +36,14 @@ class ChatApp extends React.Component {
   }
 
   handleaddBal = async () => {
+    let astroid = localStorage.getItem("astroId");
+    let userid = localStorage.getItem("CurrentChat_userid");
     let payload = {
-      userId: this.state.userId,
-      astroId: this.state.astroId,
+      userId: userid,
+      astroId: astroid,
       type: "Chat",
     };
-    console.log(payload);
+    // console.log(payload);
     await axiosConfig
       .post(`/user/deductChatBalance`, payload)
       .then((res) => {
@@ -50,6 +53,7 @@ class ChatApp extends React.Component {
         console.log(err.response.data);
       });
   };
+
   handleCloseChat = (e) => {
     e.preventDefault();
     let astroid = localStorage.getItem("astroId");
@@ -72,25 +76,31 @@ class ChatApp extends React.Component {
 
   handleAddChat = async (e) => {
     e.preventDefault();
+    debugger;
+    let userid = localStorage.getItem("CurrentChat_userid");
+    if (this.state.tooglebtn) {
+      this.handleaddBal();
+    }
     if (this.state.msg !== "") {
       this.setState({ tooglebtn: false });
       let obj = {
-        reciver: this.state.userId,
+        reciver: userid,
         msg: this.state.msg,
       };
-      let userIds = [this.state.userId];
+      let userIds = [userid];
+      let astroid = localStorage.getItem("astroId");
+
       await axiosConfig
-        .post(`/user/add_chatroom/${this.state.astroId}`, obj)
+        .post(`/user/add_chatroom/${astroid}`, obj)
         .then(async (response) => {
           console.log(response);
           if (response.data.status === true) {
             this.setState({ msg: "" });
             await axiosConfig
-              .get(`/user/allchatwithAstro/${this.state.astroId}`)
+              .get(`/user/allchatwithAstro/${astroid}`)
               .then((response1) => {
                 console.log(response1?.data?.data);
-                this.handleaddBal();
-                this.getChatdata();
+                // this.getChatdata();
 
                 if (response1.data.status === true) {
                   let filteredArray = response1?.data?.data.filter(function (
@@ -115,8 +125,60 @@ class ChatApp extends React.Component {
         });
     } else swal("Alert", "Input field is blank. Add Some Value");
   };
+
+  getChatonedata = () => {
+    setInterval(() => {
+      let astroId = localStorage.getItem("astroId");
+      let get_room_id = localStorage.getItem("get_room_id");
+      let userid = localStorage.getItem("CurrentChat_userid");
+      axiosConfig.get(`/user/getone_chat/${userid}/${astroId}`).then((res) => {
+        // console.log(res.data.data?.roomid);
+        if (res.data.data?.roomid) {
+          this.setState({ roomId: res.data.data?.roomid });
+          axiosConfig
+            .get(`/user/allchatwithuser/${res.data.data?.roomid}`)
+            .then((res) => {
+              this.setState({ roomChatData: res.data.data });
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
+      });
+    }, 3000);
+  };
   componentDidMount() {
     let astroId = localStorage.getItem("astroId");
+    let get_room_id = localStorage.getItem("get_room_id");
+    let userid = localStorage.getItem("CurrentChat_userid");
+
+    axiosConfig
+      .get(`/user/viewoneuser/${userid}`)
+      .then((res) => {
+        // console.log(res.data.data);
+        this.setState({ UserDetails: res.data.data });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    this.getChatonedata();
+    axiosConfig.get(`/user/getone_chat/${userid}/${astroId}`).then((res) => {
+      // console.log(res.data.data?.roomid);
+      if (res.data.data?.roomid) {
+        this.setState({ roomId: res.data.data?.roomid });
+        axiosConfig
+          .get(`/user/allchatwithuser/${res.data?.data?.roomid}`)
+          .then((res) => {
+            this.setState({ roomChatData: res.data.data });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+        swal("No room id found. let user to message first");
+      }
+    });
 
     if (JSON.parse(localStorage.getItem("minute"))) {
       let minute = JSON.parse(localStorage.getItem("minute"));
@@ -125,11 +187,11 @@ class ChatApp extends React.Component {
       // this.secondsToTime(minute * 60);
     }
 
-    console.log(astroId);
+    // console.log(astroId);
     axiosConfig
       .get(`/user/astrogetRoomid/${astroId}`)
       .then((response) => {
-        console.log("@@!!!", response?.data?.data);
+        // console.log("Room id", response?.data?.data);
         if (response.data.status === true) {
           this.setState({
             userChatList: response?.data?.data,
@@ -138,7 +200,7 @@ class ChatApp extends React.Component {
         }
       })
       .catch((error) => {
-        console.log(error);
+        console.log(error.response);
       });
   }
 
@@ -176,11 +238,11 @@ class ChatApp extends React.Component {
     }
   }
 
-  getChatdata = () => {
-    setInterval(() => {
-      this.getChatRoomIdnew(this.state.userData, this.state.indexValue);
-    }, 3000);
-  };
+  // getChatdata = () => {
+  //   setInterval(() => {
+  //     this.getChatRoomIdnew(this.state.userData, this.state.indexValue);
+  //   }, 3000);
+  // };
 
   getChatRoomIdnew = (user, i) => {
     console.log(user, i);
@@ -214,7 +276,7 @@ class ChatApp extends React.Component {
         console.log(error);
       });
   };
-  getChatRoomId = async (user, i) => {
+  getChatRoomId = (user, i) => {
     console.log(user, i);
     this.setState({ userData: user });
     this.setState({ ModdleToggle: true });
@@ -225,10 +287,10 @@ class ChatApp extends React.Component {
       indexValue: i,
       astroId: user?.astroid?._id,
     });
-    await axiosConfig
+    axiosConfig
       .get(`/user/allchatwithAstro/${user?.astroid?._id}`)
       .then((response) => {
-        // console.log(response?.data?.data);
+        console.log(response?.data?.data);
         if (response.data.status === true) {
           console.log("allchat", response?.data.data);
           let filteredArray = response?.data?.data.filter(function (item) {
@@ -236,7 +298,7 @@ class ChatApp extends React.Component {
               userIds.indexOf(item?.userid?._id || item?.reciver?._id) > -1
             );
           });
-
+          // console.log(filteredArray);
           this.setState({ roomChatData: filteredArray });
         }
       })
@@ -245,22 +307,24 @@ class ChatApp extends React.Component {
       });
   };
 
-  submitHandler = async (e, astroid, userId) => {
+  submitHandler = async (e, astroId, userId) => {
     e.preventDefault();
+    let astroid = localStorage.getItem("astroId");
+    let userid = localStorage.getItem("CurrentChat_userid");
     if (this.state.msg !== "") {
       let obj = {
-        reciver: this.state.userId,
+        reciver: userid,
         msg: this.state.msg,
       };
-      let userIds = [this.state.userId];
+      let userIds = [userid];
       await axiosConfig
-        .post(`/user/add_chatroom/${this.state.astroId}`, obj)
+        .post(`/user/add_chatroom/${astroid}`, obj)
         .then(async (response) => {
           console.log("add chat room", response.data.status);
           if (response.data.status === true) {
             this.setState({ msg: "" });
             await axiosConfig
-              .get(`/user/allchatwithAstro/${this.state.astroId}`)
+              .get(`/user/allchatwithAstro/${astroid}`)
               .then((response1) => {
                 console.log(response1?.data?.data);
                 if (response1.data.status === true) {
@@ -297,12 +361,6 @@ class ChatApp extends React.Component {
     const { indexValue } = this.state;
     return (
       <div>
-        {/* <Breadcrumbs
-          breadCrumbTitle="Chat"
-          breadCrumbParent="Home"
-          breadCrumbActive="Chat"
-        /> */}
-
         <section className="">
           <Container>
             <Row>
@@ -333,23 +391,18 @@ class ChatApp extends React.Component {
                             <span>
                               <img
                                 src={
-                                  this.state.roomChatData.length > 0
-                                    ? this.state.userChatList[indexValue]
-                                        ?.userid?.userimg[0]
+                                  this.state.UserDetails
+                                    ? this.state.UserDetails?.userimg
                                     : Buyimg
                                 }
                                 className="app-img"
                                 alt=""
                               />
                             </span>
-                            {this.state.roomChatData.length > 0
-                              ? this.state.userChatList[indexValue]?.userid
-                                  ?.fullname
+                            {this.state.UserDetails
+                              ? this.state.UserDetails?.fullname
                               : null}
                           </p>
-                          {/* <span className="appchattimer">
-                            {this.state.time.m} :{this.state.time.s}
-                          </span> */}
                         </div>
                         <div class="messages-history">
                           <ChatAppMassage
@@ -370,7 +423,10 @@ class ChatApp extends React.Component {
                             value={this.state.msg}
                           />
                           <button
-                            onClick={(e) => swal("Select User to full screen")}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              this.setState({ ModdleToggle: true });
+                            }}
                           >
                             <i class="material-icons">send</i>
                           </button>
@@ -412,18 +468,16 @@ class ChatApp extends React.Component {
                             <span>
                               <img
                                 src={
-                                  this.state.roomChatData.length > 0
-                                    ? this.state.userChatList[indexValue]
-                                        ?.userid?.userimg[0]
+                                  this.state.UserDetails
+                                    ? this.state.UserDetails?.userimg
                                     : Buyimg
                                 }
                                 className="app-img"
                                 alt=""
                               />
                             </span>
-                            {this.state.roomChatData.length > 0
-                              ? this.state.userChatList[indexValue]?.userid
-                                  ?.fullname
+                            {this.state.UserDetails
+                              ? this.state.UserDetails?.fullname
                               : null}
                           </p>
                           {/* <span className="appchattimer">

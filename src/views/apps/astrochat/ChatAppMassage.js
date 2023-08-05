@@ -15,12 +15,12 @@ class ChatAppMassage extends React.Component {
     // console.log("props value", this.props.roomChatData);
     return (
       <>
-        {this.props.roomChatData.length
+        {this.props.roomChatData?.length
           ? this.props.roomChatData
               .map((chat, index) => {
                 return (
                   <>
-                    {chat.type === "user" ? (
+                    {chat.type === "astrologer" ? (
                       <div class="message me">
                         <div class="message-body">{chat?.msg}</div>
                       </div>

@@ -152,6 +152,7 @@ const NavbarUser = () => {
     console.log(data);
     localStorage.setItem("notification_Accepted_id", data?._id);
     localStorage.setItem("CurrentChat_userid", data?.userid?._id);
+    localStorage.setItem("get_room_id", true);
     let accept = {
       status: "Accept",
     };
@@ -256,54 +257,60 @@ const NavbarUser = () => {
               }}
             >
               <div className="">
-                {astronotification.map((data, i) => (
-                  <Media key={i} className="dddddfd">
-                    <Media left href="#">
-                      <Bell size={21} />
-                    </Media>
-                    <Media body>
-                      <Media heading className="success media-heading" tag="h6">
-                        <smaill className="notification-text ml-1">
-                          <img
-                            className="mr-2"
-                            style={{ borderRadius: "8px" }}
-                            src={data?.userid?.userimg}
-                            width="22px"
-                            height="22px"
-                          />
-                          <span>{data?.userid?.fullname}</span>
-                        </smaill>
+                {astronotification
+                  .map((data, i) => (
+                    <Media key={i} className="dddddfd">
+                      <Media left href="#">
+                        <Bell size={21} />
                       </Media>
-                      <small className="notification-text">
-                        <p className="mb-0">
-                          Request for: <span>{data.type}</span>
-                        </p>
+                      <Media body>
+                        <Media
+                          heading
+                          className="success media-heading"
+                          tag="h6"
+                        >
+                          <smaill className="notification-text ml-1">
+                            <img
+                              className="mr-2"
+                              style={{ borderRadius: "8px" }}
+                              src={data?.userid?.userimg}
+                              width="22px"
+                              height="22px"
+                            />
+                            <span>{data?.userid?.fullname}</span>
+                          </smaill>
+                        </Media>
+                        <small className="notification-text">
+                          <p className="mb-0">
+                            Request for: <span>{data.type}</span>
+                          </p>
+                        </small>
+                        <div className="bottom-tag">
+                          <Button
+                            onClick={() => handleStatus(data)}
+                            className="success media-heading gt-1"
+                          >
+                            Accept
+                          </Button>
+                          <Button
+                            onClick={() => handledelStatus(data)}
+                            className="denger media-heading gt-2"
+                          >
+                            Reject
+                          </Button>
+                        </div>
+                      </Media>
+                      <small>
+                        <time
+                          className="media-meta"
+                          dateTime="2015-06-11T18:29:20+08:00"
+                        >
+                          {moment(data.createdAt).format("ll")}
+                        </time>
                       </small>
-                      <div className="bottom-tag">
-                        <Button
-                          onClick={() => handleStatus(data)}
-                          className="success media-heading gt-1"
-                        >
-                          Accept
-                        </Button>
-                        <Button
-                          onClick={() => handledelStatus(data)}
-                          className="denger media-heading gt-2"
-                        >
-                          Reject
-                        </Button>
-                      </div>
                     </Media>
-                    <small>
-                      <time
-                        className="media-meta"
-                        dateTime="2015-06-11T18:29:20+08:00"
-                      >
-                        {moment(data.createdAt).format("ll")}
-                      </time>
-                    </small>
-                  </Media>
-                ))}
+                  ))
+                  .reverse()}
               </div>
             </PerfectScrollbar>
             <li className="dropdown-menu-footer">
