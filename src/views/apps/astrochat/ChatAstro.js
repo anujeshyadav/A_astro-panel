@@ -76,7 +76,7 @@ class ChatApp extends React.Component {
 
   handleAddChat = async (e) => {
     e.preventDefault();
-    debugger;
+
     let userid = localStorage.getItem("CurrentChat_userid");
     if (this.state.tooglebtn) {
       this.handleaddBal();

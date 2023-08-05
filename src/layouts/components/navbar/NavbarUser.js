@@ -39,6 +39,10 @@ const NavbarUser = () => {
     e.preventDefault();
     let astroid = localStorage.getItem("astroId");
     let astroData = JSON.parse(localStorage.getItem("astroData"));
+    debugger;
+    if (!astroData) {
+      window.location.replace("/#/pages/login");
+    }
     console.log(astroData?.token);
     // .post(`/user/status_change/${astroid}`, {
     axiosConfig

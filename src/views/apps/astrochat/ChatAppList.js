@@ -26,7 +26,7 @@ class ChatAppList extends React.Component {
         className="listofchat"
         style={{ listStyle: "none", marginLeft: "none", cursor: "pointer" }}
       >
-        {userChatList && userChatList.length
+        {userChatList && userChatList?.length
           ? userChatList?.map((user, i) => {
               if (this.state.connecting_usrid === user?.userid?._id) {
                 return (
